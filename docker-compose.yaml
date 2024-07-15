@@ -1,0 +1,16 @@
+services:
+  mysql:
+    image: mysql:9
+    container_name: sonnetto-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - '3306:3306'
+    volumes:
+      - data:/var/lib/mysql
+
+volumes:
+  data:
