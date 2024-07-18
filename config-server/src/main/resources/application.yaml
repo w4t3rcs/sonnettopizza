@@ -7,4 +7,5 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/w4t3rcs/sonnettopizza/tree/main/config-server/src/main/resources/configs
+          uri: https://github.com/w4t3rcs/sonnettopizza
+          search-paths: config-server/src/main/resources/configs

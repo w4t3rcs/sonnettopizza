@@ -1,5 +1,0 @@
-ACTIVE_PROFILE: dev
-DB_USER: user
-DB_PASSWORD: password
-DB_URL: jdbc:mysql://172.30.0.2:3306
-DB_NAME: userdb
