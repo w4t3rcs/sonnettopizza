@@ -5,7 +5,7 @@ spring:
     username: user
     password: password
     url: jdbc:mysql://172.30.0.2:3306
-    name: userdb
+#    name: userdb
   jpa:
     hibernate:
       ddl-auto: create
