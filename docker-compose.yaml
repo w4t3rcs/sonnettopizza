@@ -9,6 +9,8 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - '3306:3306'
+    expose:
+      - 3306
     volumes:
       - data:/var/lib/mysql
 
