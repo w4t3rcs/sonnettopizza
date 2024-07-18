@@ -1,5 +1,10 @@
 server:
-  port: 8088
+  port: 8888
 spring:
   application:
     name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/w4t3rcs/sonnettopizza/tree/main/config-server/src/main/resources/configs
