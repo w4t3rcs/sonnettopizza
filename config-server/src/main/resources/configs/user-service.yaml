@@ -4,8 +4,8 @@ spring:
   datasource:
     username: user
     password: password
-    url: jdbc:mysql://172.30.0.2:3306
-#    name: userdb
+    url: jdbc:mysql://mysql:3306
+    name: userdb
   jpa:
     hibernate:
       ddl-auto: create
