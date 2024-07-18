@@ -1,5 +1,5 @@
 services:
-  mysql:
+  sonnetto-mysql:
     image: mysql:9
     container_name: sonnetto-mysql
     restart: unless-stopped

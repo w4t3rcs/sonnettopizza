@@ -1,3 +1,20 @@
+server:
+  port: 8081
 spring:
   application:
     name: sonnetto-user-service
+  profiles:
+    active: ${ACTIVE_PROFILE:dev}
+  datasource:
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
+    name: ${DB_NAME}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
