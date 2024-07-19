@@ -12,9 +12,15 @@ spring:
             predicates:
               - Path=/api/v1.0/users
           - id: eureka-server
-            uri: lb://localhost:8761
+            uri: http://localhost:8761
             predicates:
               - Path=/eureka/web
+            filters:
+              - SetPath=/
+          - id: eureka-server-static
+            uri: http://localhost:8761
+            predicates:
+              - Path=/eureka/**
 eureka:
   client:
     service-url:
