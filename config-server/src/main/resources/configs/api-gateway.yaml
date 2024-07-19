@@ -11,6 +11,10 @@ spring:
             uri: lb://user-service
             predicates:
               - Path=/api/v1.0/users
+          - id: eureka-server
+            uri: lb://localhost:8761
+            predicates:
+              - Path=/eureka/web
 eureka:
   client:
     service-url:
