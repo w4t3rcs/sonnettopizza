@@ -1,5 +1,5 @@
 services:
-  sonnetto-mysql:
+  mysql:
     image: mysql:9
     container_name: sonnetto-mysql
     restart: unless-stopped
@@ -9,10 +9,23 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - '3306:3306'
-    expose:
-      - 3306
     volumes:
       - data:/var/lib/mysql
-
+    networks:
+      - sonnetto-network
+  eureka-server:
+    container_name: sonnetto-eureka-server
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - '8761:8761'
+    networks:
+      - sonnetto-network
 volumes:
   data:
+
+networks:
+  sonnetto-network:
+    driver: bridge
