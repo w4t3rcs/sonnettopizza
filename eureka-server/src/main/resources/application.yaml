@@ -5,9 +5,9 @@ spring:
     name: sonnetto-eureka-server
 eureka:
   instance:
-    hostname: localhost
+    hostname: eureka-0
   client:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+      defaultZone: http://eureka-0.eureka.default.svc.cluster.local:${server.port}/eureka
