@@ -19,6 +19,9 @@
         <module>config-server</module>
         <module>eureka-server</module>
         <module>user-service</module>
+        <module>menu-service</module>
+        <module>notification-service</module>
+        <module>support-service</module>
     </modules>
     <properties>
         <java.version>17</java.version>
@@ -50,27 +53,6 @@
                         </exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>3.2.1</version>
-                <configuration>
-                    <from>
-                        <image>eclipse-temurin:17-jdk-alpine</image>
-                    </from>
-                    <to>
-                        <image>sonnetto/${project.artifactId}</image>
-                    </to>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>dockerBuild</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
