@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloud-config-server-app
+  name: config-server-app
   labels:
-    app: cloud-config-server-app
+    app: config-server-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cloud-config-server-app
+      app: config-server-app
   template:
     metadata:
       labels:
-        app: cloud-config-server-app
+        app: config-server-app
     spec:
       containers:
-        - name: cloud-config-server-app
+        - name: config-server-app
           image: w4t3rcs/sonnetto-config-server
           imagePullPolicy: Always
           ports:
@@ -25,10 +25,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cloud-config-server-svc
+  name: config-server-svc
 spec:
   ports:
     - targetPort: 8888
       port: 80
   selector:
-    app: cloud-config-server-app
+    app: config-server-app
