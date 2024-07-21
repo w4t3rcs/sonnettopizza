@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: mysql
+      labels:
+        app: mysql
+        tier: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:9
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+              name: mysql
+              protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mysql-root-password
+                  name: mysql-secret
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: mysql-user-username
+                  name: mysql-cm
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mysql-user-password
+                  name: mysql-secret
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+          volumeMounts:
+            - mountPath: var/lib/mysql
+              name: mysql-persistent-storage
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+      restartPolicy: Always
