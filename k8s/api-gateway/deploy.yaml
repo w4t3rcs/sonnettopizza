@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-app
+  labels:
+    app: api-gateway-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway-app
+  template:
+    metadata:
+      name: api-gateway-app
+      labels:
+        app: api-gateway-app
+    spec:
+      containers:
+        - name: api-gateway-app
+          image: w4t3rcs/sonnetto-api-gateway
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+      restartPolicy: Always

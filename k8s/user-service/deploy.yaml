@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-app
+  labels:
+    app: user-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service-app
+  template:
+    metadata:
+      name: user-service-app
+      labels:
+        app: user-service-app
+    spec:
+      containers:
+        - name: user-service-app
+          image: w4t3rcs/sonnetto-user-service
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+      restartPolicy: Always

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-server-app
+  labels:
+    app: config-server-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-server-app
+  template:
+    metadata:
+      name: config-server-app
+      labels:
+        app: config-server-app
+    spec:
+      containers:
+        - name: config-server-app
+          image: w4t3rcs/sonnetto-config-server
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8888
+              protocol: TCP
+      restartPolicy: Always

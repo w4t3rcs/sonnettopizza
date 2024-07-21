@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eureka-server-app
+  labels:
+    app: eureka-server-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eureka-server-app
+  template:
+    metadata:
+      name: eureka-server-app
+      labels:
+        app: eureka-server-app
+    spec:
+      containers:
+        - name: eureka-server-app
+          image: w4t3rcs/sonnetto-eureka-server
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8761
+              protocol: TCP
+      restartPolicy: Always
