@@ -11,15 +11,26 @@ spec:
       app: api-gateway-app
   template:
     metadata:
-      name: api-gateway-app
       labels:
         app: api-gateway-app
     spec:
       containers:
         - name: api-gateway-app
           image: w4t3rcs/sonnetto-api-gateway
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
-              protocol: TCP
-      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway-svc
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: api-gateway-app

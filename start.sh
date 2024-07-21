@@ -1,5 +1,4 @@
 minikube start
-minikube status
 mvn clean compile jib:build
 cd ./k8s/ || exit
 kubectl apply -f ./mysql/

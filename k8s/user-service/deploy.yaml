@@ -8,18 +8,28 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-service-app
+      app : user-service-app
   template:
     metadata:
-      name: user-service-app
       labels:
         app: user-service-app
     spec:
       containers:
         - name: user-service-app
           image: w4t3rcs/sonnetto-user-service
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8081
-              protocol: TCP
-      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name:  user-service-svc
+spec:
+  selector:
+    app:  user-service-app
+  ports:
+    - port:  80
+      targetPort:  8081

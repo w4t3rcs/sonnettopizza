@@ -1,34 +1,46 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: mysql
+    tier: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
   labels:
     app: mysql
+    tier: database
 spec:
   selector:
     matchLabels:
       app: mysql
-      tier: mysql
+      tier: database
   strategy:
     type: Recreate
   template:
     metadata:
-      name: mysql
       labels:
         app: mysql
-        tier: mysql
+        tier: database
     spec:
       containers:
-        - name: mysql
-          image: mysql:9
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 3306
-              name: mysql
-              protocol: TCP
+        - image: mysql:5.7 # image from docker-hub
+          args:
+            - "--ignore-db-dir=lost+found" # Workaround for https://github.com/docker-library/mysql/issues/186
+          name: mysql
           env:
             - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
+              valueFrom :
                 secretKeyRef:
                   key: mysql-root-password
                   name: mysql-secret
@@ -42,14 +54,31 @@ spec:
                 secretKeyRef:
                   key: mysql-user-password
                   name: mysql-secret
-          livenessProbe:
-            tcpSocket:
-              port: 3306
+
+          ports:
+            - containerPort: 3306
+              name: mysql
           volumeMounts:
-            - mountPath: var/lib/mysql
-              name: mysql-persistent-storage
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
-            claimName: mysql-pvc
-      restartPolicy: Always
+            claimName: mysql-pv-claim
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+    tier: database
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+  selector:
+    app: mysql
+    tier: database
+  clusterIP: None

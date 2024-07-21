@@ -5,6 +5,8 @@ spring:
     username: user
     password: password
     url: jdbc:mysql://mysql:3306/userdb?useSSL=false&createDatabaseIfNotExist=true
+    hikari:
+      initialization-fail-timeout: 0
   jpa:
     hibernate:
       ddl-auto: create
