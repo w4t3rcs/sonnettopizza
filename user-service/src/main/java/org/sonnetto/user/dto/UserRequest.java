@@ -9,7 +9,6 @@ import org.sonnetto.user.entity.User;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserRequest {
-    private Long id;
     private String name;
     private String password;
     private String email;
@@ -18,7 +17,6 @@ public class UserRequest {
     @Valid
     public User toUser() {
         return User.builder()
-                .id(this.getId())
                 .name(this.getName())
                 .password(this.getPassword())
                 .email(this.getEmail())
