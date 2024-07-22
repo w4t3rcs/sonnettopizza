@@ -12,16 +12,16 @@ spring:
             predicates:
               - Path=/api/v1.0/users
           - id: eureka-server
-            uri: http://eureka-0.eureka.default.svc.cluster.local:8761
+            uri: http://eureka-server:8761
             predicates:
               - Path=/eureka/web
             filters:
               - SetPath=/
           - id: eureka-server-static
-            uri: http://eureka-0.eureka.default.svc.cluster.local:8761
+            uri: http://eureka-server:8761
             predicates:
               - Path=/eureka/**
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka-0.eureka.default.svc.cluster.local:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
