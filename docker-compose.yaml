@@ -1,17 +1,4 @@
 services:
-  mysql:
-    container_name: sonnetto-mysql
-    image: mysql:9
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-      - '3306:3306'
-    volumes:
-      - db:/var/lib/mysql
-    networks:
-      - sonnetto
   eureka-server:
     container_name: sonnetto-eureka-server
     image: w4t3rcs/sonnetto-eureka-server:latest
@@ -30,13 +17,27 @@ services:
       - eureka-server
     networks:
       - sonnetto
+  user-service-mysql:
+    container_name: sonnetto-mysql
+    image: mysql:9
+    environment:
+      MYSQL_DATABASE: ${MYSQL_USER_SERVICE_DB}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - '3306:3306'
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - sonnetto
   user-service:
     container_name: sonnetto-user-service
     image: w4t3rcs/sonnetto-user-service:latest
     pull_policy: always
     environment:
       SPRING_PROFILES_ACTIVE: default
-      SPRING_DATASOURCE_URL: ${MYSQL_URL}/userdb?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_URL: ${MYSQL_URL}/${}
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
@@ -45,7 +46,7 @@ services:
     depends_on:
       - eureka-server
       - config-server
-      - mysql
+      - user-service-mysql
     networks:
       - sonnetto
   api-gateway:
@@ -57,7 +58,7 @@ services:
     depends_on:
       - eureka-server
       - config-server
-      - mysql
+      - user-service-mysql
       - user-service
     networks:
       - sonnetto

@@ -4,7 +4,8 @@ spring:
   datasource:
     username: user
     password: password
-    url: jdbc:mysql://mysql:3306/userdb?useSSL=false&createDatabaseIfNotExist=true
+    url: jdbc:mysql://mysql:3306
+    name: userdb
     hikari:
       initialization-fail-timeout: 0
   jpa:
