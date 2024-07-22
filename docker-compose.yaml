@@ -49,6 +49,39 @@ services:
       - user-service-mysql
     networks:
       - sonnetto
+  keycloak-mysql:
+    container_name: sonnetto-keycloak-mysql
+    image: mysql:9
+    environment:
+      MYSQL_DATABASE: ${MYSQL_KEYCLOAK_DB}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - keycloak_db:/var/lib/mysql
+    networks:
+      - sonnetto
+  keycloak:
+    container_name: sonnetto-keycloak
+    image: quay.io/keycloak/keycloak:20.0.2
+    environment:
+      KC_DB: mysql
+      KC_DB_PASSWORD: ${MYSQL_PASSWORD}
+      KC_DB_USERNAME: ${MYSQL_USER}
+      KC_DB_URL: ${MYSQL_KEYCLOAK_URL}/${MYSQL_KEYCLOAK_DB}
+
+      KC_FEATURES: preview
+      KEYCLOAK_ADMIN: ${KEYCLOAK_USERNAME}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
+    ports:
+      - '8282:8080'
+    command: start-dev --import-realm
+    depends_on:
+      - keycloak-mysql
+    volumes:
+      - ./realms/:/opt/keycloak/data/import/
+    networks:
+      - sonnetto
   api-gateway:
     container_name: sonnetto-api-gateway
     image: w4t3rcs/sonnetto-api-gateway:latest
@@ -64,6 +97,7 @@ services:
       - sonnetto
 volumes:
   db:
+  keycloak_db:
 
 networks:
   sonnetto:
