@@ -36,7 +36,10 @@ services:
     pull_policy: always
     environment:
       SPRING_PROFILES_ACTIVE: default
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/userdb?useSSL=false&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_URL: ${MYSQL_URL}/userdb?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
     ports:
       - '8081:8081'
     depends_on:
