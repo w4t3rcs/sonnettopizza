@@ -7,8 +7,8 @@ import org.sonnetto.user.entity.User;
 import org.sonnetto.user.exception.UserNotFoundException;
 import org.sonnetto.user.repository.UserRepository;
 import org.sonnetto.user.service.UserService;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,9 +32,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserResponse> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable)
-                .map(UserResponse::fromUser);
+    public PagedModel<UserResponse> getAllUsers(Pageable pageable) {
+        return new PagedModel<>(userRepository.findAll(pageable)
+                .map(UserResponse::fromUser));
     }
 
     @Override

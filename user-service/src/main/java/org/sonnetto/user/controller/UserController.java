@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.sonnetto.user.dto.UserRequest;
 import org.sonnetto.user.dto.UserResponse;
 import org.sonnetto.user.service.UserService;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedModel;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +24,9 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserResponse>> getAllUsers(
+    public PagedModel<UserResponse> getAllUsers(
             @SortDefault(sort = "id", direction = Sort.Direction.ASC) @PageableDefault(size = 25) Pageable pageable) {
-        return ResponseEntity.ok(userService.getAllUsers(pageable));
+        return userService.getAllUsers(pageable);
     }
 
     @GetMapping("/{id}")
