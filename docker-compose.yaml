@@ -65,6 +65,12 @@ services:
     container_name: sonnetto-keycloak
     image: quay.io/keycloak/keycloak:20.0.2
     environment:
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8282
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HEALTH_ENABLED: true
       KC_DB: mysql
       KC_DB_PASSWORD: ${MYSQL_PASSWORD}
       KC_DB_USERNAME: ${MYSQL_USER}
