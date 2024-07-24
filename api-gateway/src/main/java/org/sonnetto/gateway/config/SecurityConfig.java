@@ -16,10 +16,12 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity, ReactiveJwtDecoder jwtDecoder) {
         return httpSecurity.csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchangeSpec ->
-                        exchangeSpec.pathMatchers("/eureka/**")
-                                .permitAll()
-                                .anyExchange()
-                                .authenticated())
+//                        exchangeSpec.pathMatchers("/eureka/**")
+//                                .permitAll()
+//                                .anyExchange()
+//                                .authenticated())
+                        exchangeSpec.anyExchange()
+                                .permitAll())
                 .oauth2ResourceServer(serverSpec -> serverSpec.jwt(jwtSpec -> jwtSpec.jwtDecoder(jwtDecoder)))
                 .build();
     }

@@ -22,9 +22,10 @@ public class SecurityConfig {
 
     @Bean
     public InMemoryUserDetailsManager authenticationManager(@Value("${eureka.security.user}") String user,
+                                                            PasswordEncoder passwordEncoder,
                                                             @Value("${eureka.security.password}") String password) throws Exception {
         return new InMemoryUserDetailsManager(User.withUsername(user)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .roles("USER")
                 .build());
     }
