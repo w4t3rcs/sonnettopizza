@@ -32,7 +32,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(registry -> registry.anyRequest().authenticated())
+                .authorizeHttpRequests(registry ->
+                        registry.requestMatchers("/eureka").authenticated()
+                                .anyRequest().permitAll())
                 .httpBasic(configurer -> configurer.init(httpSecurity))
                 .build();
     }
