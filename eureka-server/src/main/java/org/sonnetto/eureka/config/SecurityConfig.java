@@ -34,7 +34,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry ->
-                        registry.requestMatchers("/eureka").authenticated()
+                        registry.requestMatchers("/").authenticated()
                                 .anyRequest().permitAll())
                 .httpBasic(configurer -> configurer.init(httpSecurity))
                 .build();
