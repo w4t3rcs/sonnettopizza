@@ -21,8 +21,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public InMemoryUserDetailsManager authenticationManager(@Value("eureka.security.user") String user,
-                                                            @Value("eureka.security.password") String password) throws Exception {
+    public InMemoryUserDetailsManager authenticationManager(@Value("${eureka.security.user}") String user,
+                                                            @Value("${eureka.security.password}") String password) throws Exception {
         return new InMemoryUserDetailsManager(User.withUsername(user)
                 .password(password)
                 .roles("USER")
