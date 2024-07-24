@@ -99,8 +99,8 @@ services:
       - config-server
       - user-service-mysql
       - user-service
-      - keycloak-mysql
-      - keycloak
+#      - keycloak-mysql
+#      - keycloak
     networks:
       - sonnetto
 volumes:
