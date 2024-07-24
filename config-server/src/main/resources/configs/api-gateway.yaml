@@ -2,11 +2,11 @@ server:
   port:
     8080
 spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8282/realms/sonnetto-realm
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: http://localhost:8282/realms/sonnetto-realm
   cloud:
     gateway:
       mvc:
