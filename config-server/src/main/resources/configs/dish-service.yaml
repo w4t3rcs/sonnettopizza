@@ -1,0 +1,36 @@
+server:
+  port: 8083
+spring:
+  datasource:
+    username: user
+    password: password
+    url: jdbc:mysql://dish-service-mysql:3306
+    name: dishdb
+    hikari:
+      initialization-fail-timeout: 0
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  cache:
+    type: redis
+    redis:
+      cache-null-values: false
+      enable-statistics: true
+      time-to-live: 2m
+  data:
+    redis:
+      host: dish-service-redis
+      password: password
+      port: 6379
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    show_details: always
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/

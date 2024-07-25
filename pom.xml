@@ -19,8 +19,8 @@
         <module>config-server</module>
         <module>user-service</module>
         <module>ingredient-service</module>
+        <module>dish-service</module>
         <module>api-gateway</module>
-<!--        <module>menu-service</module>-->
 <!--        <module>notification-service</module>-->
 <!--        <module>support-service</module>-->
     </modules>

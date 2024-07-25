@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: dish-service
+  config:
+    import: optional:configserver:http://config-server:8888
