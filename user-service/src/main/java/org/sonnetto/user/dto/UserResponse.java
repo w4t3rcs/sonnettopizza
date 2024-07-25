@@ -6,9 +6,11 @@ import lombok.Data;
 import org.sonnetto.user.entity.Role;
 import org.sonnetto.user.entity.User;
 
+import java.io.Serializable;
+
 @Builder
 @Data
-public class UserResponse {
+public class UserResponse implements Serializable {
     private Long id;
     private String name;
     private String email;

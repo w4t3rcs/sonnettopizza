@@ -6,9 +6,11 @@ import lombok.Data;
 import org.sonnetto.user.entity.Role;
 import org.sonnetto.user.entity.User;
 
+import java.io.Serializable;
+
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserRequest {
+public class UserRequest implements Serializable {
     private String name;
     private String password;
     private String email;
