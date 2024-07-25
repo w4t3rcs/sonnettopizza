@@ -10,6 +10,17 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: true
+  cache:
+    type: redis
+    redis:
+      cache-null-values: false
+      enable-statistics: true
+      time-to-live: 2m
+  data:
+    redis:
+      host: user-service-redis
+      password: password
+      port: 6379
 management:
   endpoints:
     web:

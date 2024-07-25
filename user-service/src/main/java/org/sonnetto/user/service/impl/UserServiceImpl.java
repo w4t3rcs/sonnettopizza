@@ -7,6 +7,10 @@ import org.sonnetto.user.entity.User;
 import org.sonnetto.user.exception.UserNotFoundException;
 import org.sonnetto.user.repository.UserRepository;
 import org.sonnetto.user.service.UserService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
+    @Caching(cacheable = @Cacheable(key = "#userRepository.count()", value = "UserService::createUser"))
     public UserResponse createUser(UserRequest userRequest) {
         return UserResponse.fromUser(userRepository.save(userRequest.toUser()));
     }
@@ -28,12 +33,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(key = "#id", value = "UserService::getUser")
     public UserResponse getUser(Long id) {
         return UserResponse.fromUser(userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new));
     }
 
     @Override
+    @Caching(put = @CachePut(key = "#id", value = "UserService::updateUser"))
     public UserResponse updateUser(Long id, UserRequest userRequest) {
         User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
@@ -45,6 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Caching(evict = @CacheEvict(key = "#id", value = "UserService::deleteUser"))
     public Long deleteUser(Long id) {
         userRepository.deleteById(id);
         return id;

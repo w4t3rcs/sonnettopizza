@@ -31,6 +31,17 @@ services:
       - user-service-db:/var/lib/mysql
     networks:
       - sonnetto
+  user-service-redis:
+    container_name: sonnetto-user-service-redis
+    image: redis:7.2.5
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - user-service-cache:/data
+    networks:
+      - sonnetto
   user-service:
     container_name: sonnetto-user-service
     image: w4t3rcs/sonnetto-user-service:latest
@@ -47,6 +58,7 @@ services:
       - eureka-server
       - config-server
       - user-service-mysql
+      - user-service-redis
     networks:
       - sonnetto
   ingredient-service-mysql:
@@ -59,6 +71,15 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - ingredient-service-db:/var/lib/mysql
+    networks:
+      - sonnetto
+  ingredient-service-redis:
+    container_name: sonnetto-ingredient-service-redis
+    image: redis:7.2.5
+    restart: always
+    command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - ingredient-service-cache:/data
     networks:
       - sonnetto
   ingredient-service:
@@ -77,6 +98,7 @@ services:
       - eureka-server
       - config-server
       - ingredient-service-mysql
+      - ingredient-service-redis
     networks:
       - sonnetto
   keycloak-mysql:
@@ -129,6 +151,8 @@ services:
       - config-server
       - user-service-mysql
       - ingredient-service-mysql
+      - user-service-redis
+      - ingredient-service-redis
       - user-service
       - ingredient-service
 #      - keycloak-mysql
@@ -137,7 +161,9 @@ services:
       - sonnetto
 volumes:
   user-service-db:
+  user-service-cache:
   ingredient-service-db:
+  ingredient-service-cache:
   keycloak_db:
 
 networks:
