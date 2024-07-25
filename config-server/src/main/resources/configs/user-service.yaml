@@ -1,3 +1,5 @@
+server:
+  port: 8081
 spring:
   datasource:
     username: user
@@ -28,3 +30,7 @@ management:
         include: '*'
   health:
     show_details: always
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/

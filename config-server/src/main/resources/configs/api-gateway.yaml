@@ -1,3 +1,5 @@
+server:
+  port: 8080
 spring:
 #  security:
 #    oauth2:
@@ -22,3 +24,7 @@ spring:
             uri: http://eureka-server:8761
             predicates:
               - Path=/eureka/**
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
