@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    @Caching(cacheable = @Cacheable(value = "usersCache"))
+    @Caching(cacheable = @Cacheable("usersCache"))
     public UserResponse createUser(UserRequest userRequest) {
         return UserResponse.fromUser(userRepository.save(userRequest.toUser()));
     }
@@ -33,14 +33,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "usersCache")
+    @Cacheable("usersCache")
     public UserResponse getUser(Long id) {
         return UserResponse.fromUser(userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new));
     }
 
     @Override
-    @Caching(put = @CachePut(value = "usersCache"))
+    @Caching(put = @CachePut("usersCache"))
     public UserResponse updateUser(Long id, UserRequest userRequest) {
         User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Caching(evict = @CacheEvict(value = "usersCache"))
+    @Caching(evict = @CacheEvict("usersCache"))
     public Long deleteUser(Long id) {
         userRepository.deleteById(id);
         return id;
