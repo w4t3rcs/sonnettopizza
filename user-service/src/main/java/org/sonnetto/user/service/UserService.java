@@ -5,14 +5,10 @@ import org.sonnetto.user.dto.UserResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 
-import java.util.List;
-
 public interface UserService {
     UserResponse createUser(UserRequest userRequest);
 
-    List<UserResponse> getAllUsers();
-
-    PagedModel<UserResponse> getAllUsers(Pageable pageable);
+    PagedModel<UserResponse> getUsers(Pageable pageable);
 
     UserResponse getUser(Long id);
 

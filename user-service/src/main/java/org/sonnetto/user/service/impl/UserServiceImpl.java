@@ -11,8 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -24,15 +22,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll()
-                .stream()
-                .map(UserResponse::fromUser)
-                .toList();
-    }
-
-    @Override
-    public PagedModel<UserResponse> getAllUsers(Pageable pageable) {
+    public PagedModel<UserResponse> getUsers(Pageable pageable) {
         return new PagedModel<>(userRepository.findAll(pageable)
                 .map(UserResponse::fromUser));
     }

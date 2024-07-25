@@ -24,9 +24,9 @@ public class UserController {
     }
 
     @GetMapping
-    public PagedModel<UserResponse> getAllUsers(
+    public PagedModel<UserResponse> getUsers(
             @SortDefault(sort = "id", direction = Sort.Direction.ASC) @PageableDefault(size = 25) Pageable pageable) {
-        return userService.getAllUsers(pageable);
+        return userService.getUsers(pageable);
     }
 
     @GetMapping("/{id}")
