@@ -105,7 +105,7 @@ services:
     container_name: sonnetto-dish-service-mysql
     image: mysql:9
     environment:
-      MYSQL_DATABASE: ${MYSQL_INGREDIENT_SERVICE_DB}
+      MYSQL_DATABASE: ${MYSQL_DISH_SERVICE_DB}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
