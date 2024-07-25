@@ -20,7 +20,7 @@ spring:
       time-to-live: 2m
   data:
     redis:
-      host: user-service-redis
+      host: ingredient-service-redis
       password: password
       port: 6379
 management:
