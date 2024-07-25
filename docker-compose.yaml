@@ -43,6 +43,8 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
     ports:
       - '8081:8081'
+    expose:
+      - 8081
     depends_on:
       - eureka-server
       - config-server
@@ -73,6 +75,8 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
     ports:
       - '8082:8082'
+    expose:
+      - 8082
     depends_on:
       - eureka-server
       - config-server
@@ -128,7 +132,9 @@ services:
       - eureka-server
       - config-server
       - user-service-mysql
+      - ingredient-service-mysql
       - user-service
+      - ingredient-service
 #      - keycloak-mysql
 #      - keycloak
     networks:

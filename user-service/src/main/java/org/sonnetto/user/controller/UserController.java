@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedModel;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> postUser(@RequestBody UserRequest userRequest) {
-        return ResponseEntity.ok(userService.createUser(userRequest));
+        return new ResponseEntity<>(userService.createUser(userRequest), HttpStatus.CREATED);
     }
 
     @GetMapping
