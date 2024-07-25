@@ -7,6 +7,7 @@ import org.sonnetto.dish.entity.Dish;
 import org.sonnetto.dish.exception.DishNotFoundException;
 import org.sonnetto.dish.repository.DishRepository;
 import org.sonnetto.dish.service.DishService;
+import org.sonnetto.dish.service.IngredientChecker;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,11 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class DishServiceImpl implements DishService {
     private final DishRepository dishRepository;
+    private final IngredientChecker ingredientChecker;
 
     @Override
     @Caching(cacheable = @Cacheable("dishCache"))
     @Transactional
     public DishResponse createDish(DishRequest dishRequest) {
+        ingredientChecker.checkExistence(dishRequest);
         return DishResponse.fromDish(dishRepository.save(dishRequest.toDish()));
     }
 
@@ -51,7 +54,8 @@ public class DishServiceImpl implements DishService {
                 .orElseThrow(DishNotFoundException::new);
         if (dishRequest.getName() != null) dish.setName(dish.getName());
         if (dishRequest.getType() != null) dish.setType(dish.getType());
-        if (dishRequest.getIngredientIds() != null) dish.setIngredientIds(dish.getIngredientIds());
+        if (dishRequest.getIngredientIds() != null
+                && ingredientChecker.checkExistence(dishRequest)) dish.setIngredientIds(dish.getIngredientIds());
         return DishResponse.fromDish(dishRepository.save(dish));
     }
 
