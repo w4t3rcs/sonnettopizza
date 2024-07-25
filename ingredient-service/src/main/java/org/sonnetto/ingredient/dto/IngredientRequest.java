@@ -6,9 +6,11 @@ import lombok.Data;
 import org.sonnetto.ingredient.entity.Ingredient;
 import org.sonnetto.ingredient.entity.Type;
 
+import java.io.Serializable;
+
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class IngredientRequest {
+public class IngredientRequest implements Serializable {
     private String name;
     private Type type;
 

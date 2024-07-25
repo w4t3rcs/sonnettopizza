@@ -6,9 +6,11 @@ import lombok.Data;
 import org.sonnetto.ingredient.entity.Ingredient;
 import org.sonnetto.ingredient.entity.Type;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
-public class IngredientResponse {
+public class IngredientResponse implements Serializable {
     private Long id;
     private String name;
     private Type type;

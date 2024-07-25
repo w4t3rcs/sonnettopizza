@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.validator.constraints.Length;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @ToString
@@ -14,7 +15,7 @@ import java.util.Objects;
 @AllArgsConstructor @NoArgsConstructor
 @Entity
 @Table(name = "ingredients")
-public class Ingredient {
+public class Ingredient implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;

@@ -7,6 +7,10 @@ import org.sonnetto.ingredient.entity.Ingredient;
 import org.sonnetto.ingredient.exception.IngredientNotFoundException;
 import org.sonnetto.ingredient.repository.IngredientRepository;
 import org.sonnetto.ingredient.service.IngredientService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,7 @@ public class IngredientServiceImpl implements IngredientService {
     private final IngredientRepository ingredientRepository;
 
     @Override
+    @Caching(cacheable = @Cacheable("ingredientsCache"))
     public IngredientResponse createIngredient(IngredientRequest ingredientRequest) {
         return IngredientResponse.fromIngredient(ingredientRepository.save(ingredientRequest.toIngredient()));
     }
@@ -28,12 +33,14 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    @Cacheable("ingredientsCache")
     public IngredientResponse getIngredient(Long id) {
         return IngredientResponse.fromIngredient(ingredientRepository.findById(id)
                 .orElseThrow(IngredientNotFoundException::new));
     }
 
     @Override
+    @Caching(put = @CachePut("ingredientsCache"))
     public IngredientResponse updateIngredient(Long id, IngredientRequest ingredientRequest) {
         Ingredient ingredient = ingredientRepository.findById(id)
                 .orElseThrow(IngredientNotFoundException::new);
@@ -43,6 +50,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    @Caching(evict = @CacheEvict("ingredientsCache"))
     public Long deleteIngredient(Long id) {
         ingredientRepository.deleteById(id);
         return id;
