@@ -18,7 +18,7 @@ services:
     networks:
       - sonnetto
   user-service-mysql:
-    container_name: sonnetto-mysql
+    container_name: sonnetto-user-service-mysql
     image: mysql:9
     environment:
       MYSQL_DATABASE: ${MYSQL_USER_SERVICE_DB}
@@ -28,7 +28,7 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - db:/var/lib/mysql
+      - user-service-db:/var/lib/mysql
     networks:
       - sonnetto
   user-service:
@@ -47,6 +47,36 @@ services:
       - eureka-server
       - config-server
       - user-service-mysql
+    networks:
+      - sonnetto
+  ingredient-service-mysql:
+    container_name: sonnetto-ingredient-service-mysql
+    image: mysql:9
+    environment:
+      MYSQL_DATABASE: ${MYSQL_INGREDIENT_SERVICE_DB}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ingredient-service-db:/var/lib/mysql
+    networks:
+      - sonnetto
+  ingredient-service:
+    container_name: sonnetto-ingredient-service
+    image: w4t3rcs/sonnetto-ingredient-service:latest
+    pull_policy: always
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_DATASOURCE_URL: ${MYSQL_INGREDIENT_SERVICE_URL}/${MYSQL_INGREDIENT_SERVICE_DB}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+    ports:
+      - '8082:8082'
+    depends_on:
+      - eureka-server
+      - config-server
+      - ingredient-service-mysql
     networks:
       - sonnetto
   keycloak-mysql:
@@ -104,7 +134,8 @@ services:
     networks:
       - sonnetto
 volumes:
-  db:
+  user-service-db:
+  ingredient-service-db:
   keycloak_db:
 
 networks:
