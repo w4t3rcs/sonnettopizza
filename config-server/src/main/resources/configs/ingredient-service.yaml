@@ -1,0 +1,21 @@
+server:
+  port: 8082
+spring:
+  datasource:
+    username: user
+    password: password
+    url: jdbc:mysql://ingredient-service-mysql:3306
+    name: ingredientdb
+    hikari:
+      initialization-fail-timeout: 0
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *
+  health:
+    show_details: always
