@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +23,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Caching(cacheable = @Cacheable("userCache"))
+    @Transactional
     public UserResponse createUser(UserRequest userRequest) {
         return UserResponse.fromUser(userRepository.save(userRequest.toUser()));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PagedModel<UserResponse> getUsers(Pageable pageable) {
         return new PagedModel<>(userRepository.findAll(pageable)
                 .map(UserResponse::fromUser));
@@ -34,6 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Cacheable("userCache")
+    @Transactional(readOnly = true)
     public UserResponse getUser(Long id) {
         return UserResponse.fromUser(userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new));
@@ -41,6 +45,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Caching(put = @CachePut("userCache"))
+    @Transactional
     public UserResponse updateUser(Long id, UserRequest userRequest) {
         User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
@@ -53,6 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Caching(evict = @CacheEvict("userCache"))
+    @Transactional
     public Long deleteUser(Long id) {
         userRepository.deleteById(id);
         return id;

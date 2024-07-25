@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +23,13 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @Caching(cacheable = @Cacheable("ingredientCache"))
+    @Transactional
     public IngredientResponse createIngredient(IngredientRequest ingredientRequest) {
         return IngredientResponse.fromIngredient(ingredientRepository.save(ingredientRequest.toIngredient()));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PagedModel<IngredientResponse> getIngredients(Pageable pageable) {
         return new PagedModel<>(ingredientRepository.findAll(pageable)
                 .map(IngredientResponse::fromIngredient));
@@ -34,6 +37,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @Cacheable("ingredientCache")
+    @Transactional(readOnly = true)
     public IngredientResponse getIngredient(Long id) {
         return IngredientResponse.fromIngredient(ingredientRepository.findById(id)
                 .orElseThrow(IngredientNotFoundException::new));
@@ -41,6 +45,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @Caching(put = @CachePut("ingredientCache"))
+    @Transactional
     public IngredientResponse updateIngredient(Long id, IngredientRequest ingredientRequest) {
         Ingredient ingredient = ingredientRepository.findById(id)
                 .orElseThrow(IngredientNotFoundException::new);
@@ -51,6 +56,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @Caching(evict = @CacheEvict("ingredientCache"))
+    @Transactional
     public Long deleteIngredient(Long id) {
         ingredientRepository.deleteById(id);
         return id;

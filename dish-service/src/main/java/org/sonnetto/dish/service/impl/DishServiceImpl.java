@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +23,13 @@ public class DishServiceImpl implements DishService {
 
     @Override
     @Caching(cacheable = @Cacheable("dishCache"))
+    @Transactional
     public DishResponse createDish(DishRequest dishRequest) {
         return DishResponse.fromDish(dishRepository.save(dishRequest.toDish()));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PagedModel<DishResponse> getDishes(Pageable pageable) {
         return new PagedModel<>(dishRepository.findAll(pageable)
                 .map(DishResponse::fromDish));
@@ -34,6 +37,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     @Cacheable("dishCache")
+    @Transactional(readOnly = true)
     public DishResponse getDish(Long id) {
         return DishResponse.fromDish(dishRepository.findById(id)
                 .orElseThrow(DishNotFoundException::new));
@@ -41,6 +45,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     @Caching(put = @CachePut("dishCache"))
+    @Transactional
     public DishResponse updateDish(Long id, DishRequest dishRequest) {
         Dish dish = dishRepository.findById(id)
                 .orElseThrow(DishNotFoundException::new);
@@ -52,6 +57,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     @Caching(evict = @CacheEvict("dishCache"))
+    @Transactional
     public Long deleteDish(Long id) {
         dishRepository.deleteById(id);
         return id;
