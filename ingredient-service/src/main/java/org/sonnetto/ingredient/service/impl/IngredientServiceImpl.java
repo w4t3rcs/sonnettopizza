@@ -21,7 +21,7 @@ public class IngredientServiceImpl implements IngredientService {
     private final IngredientRepository ingredientRepository;
 
     @Override
-    @Caching(cacheable = @Cacheable("ingredientsCache"))
+    @Caching(cacheable = @Cacheable("ingredientCache"))
     public IngredientResponse createIngredient(IngredientRequest ingredientRequest) {
         return IngredientResponse.fromIngredient(ingredientRepository.save(ingredientRequest.toIngredient()));
     }
@@ -33,14 +33,14 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    @Cacheable("ingredientsCache")
+    @Cacheable("ingredientCache")
     public IngredientResponse getIngredient(Long id) {
         return IngredientResponse.fromIngredient(ingredientRepository.findById(id)
                 .orElseThrow(IngredientNotFoundException::new));
     }
 
     @Override
-    @Caching(put = @CachePut("ingredientsCache"))
+    @Caching(put = @CachePut("ingredientCache"))
     public IngredientResponse updateIngredient(Long id, IngredientRequest ingredientRequest) {
         Ingredient ingredient = ingredientRepository.findById(id)
                 .orElseThrow(IngredientNotFoundException::new);
@@ -50,7 +50,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    @Caching(evict = @CacheEvict("ingredientsCache"))
+    @Caching(evict = @CacheEvict("ingredientCache"))
     public Long deleteIngredient(Long id) {
         ingredientRepository.deleteById(id);
         return id;
