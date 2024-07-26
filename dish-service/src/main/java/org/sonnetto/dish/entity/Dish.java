@@ -23,6 +23,7 @@ public class Dish implements Serializable {
     private Long id;
     @NotBlank
     @Length(max = 64)
+    @Column(unique = true)
     private String name;
     @NotNull
     @Enumerated(EnumType.STRING)

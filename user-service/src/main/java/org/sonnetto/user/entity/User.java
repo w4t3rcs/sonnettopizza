@@ -23,6 +23,7 @@ public class User implements Serializable {
     private Long id;
     @NotBlank
     @Length(max = 32)
+    @Column(unique = true)
     private String name;
     @NotBlank
     @Length(max = 32)
@@ -30,6 +31,7 @@ public class User implements Serializable {
     @NotBlank
     @Length(max = 320)
     @Email
+    @Column(unique = true)
     private String email;
     @NotNull
     @Enumerated(EnumType.STRING)
