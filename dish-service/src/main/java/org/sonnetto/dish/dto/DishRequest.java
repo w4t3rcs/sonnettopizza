@@ -18,6 +18,6 @@ public class DishRequest implements Serializable {
 
     @Valid
     public Dish toDish() {
-        return new Dish(null, name, type, ingredientIds);
+        return new Dish(null, this.getName(), this.getType(), this.getIngredientIds());
     }
 }

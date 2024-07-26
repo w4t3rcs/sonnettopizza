@@ -138,6 +138,45 @@ services:
       - dish-service-redis
     networks:
       - sonnetto
+  price-service-mysql:
+    container_name: sonnetto-price-service-mysql
+    image: mysql:9
+    environment:
+      MYSQL_DATABASE: ${MYSQL_PRICE_SERVICE_DB}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - price-service-db:/var/lib/mysql
+    networks:
+      - sonnetto
+  price-service-redis:
+    container_name: sonnetto-price-service-redis
+    image: redis:7.2.5
+    command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - price-service-cache:/data
+    networks:
+      - sonnetto
+  price-service:
+    container_name: sonnetto-price-service
+    image: w4t3rcs/sonnetto-price-service:latest
+    pull_policy: always
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_DATASOURCE_URL: ${MYSQL_PRICE_SERVICE_URL}/${MYSQL_PRICE_SERVICE_DB}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+    ports:
+      - '8084:8084'
+    depends_on:
+      - eureka-server
+      - config-server
+      - price-service-mysql
+      - price-service-redis
+    networks:
+      - sonnetto
   keycloak-mysql:
     container_name: sonnetto-keycloak-mysql
     image: mysql:9
@@ -189,12 +228,15 @@ services:
       - user-service-mysql
       - ingredient-service-mysql
       - dish-service-mysql
+      - price-service-mysql
       - user-service-redis
       - ingredient-service-redis
       - dish-service-redis
+      - price-service-redis
       - user-service
       - ingredient-service
       - dish-service
+      - price-service
 #      - keycloak-mysql
 #      - keycloak
     networks:
@@ -206,6 +248,8 @@ volumes:
   ingredient-service-cache:
   dish-service-db:
   dish-service-cache:
+  price-service-db:
+  price-service-cache:
   keycloak_db:
 
 networks:

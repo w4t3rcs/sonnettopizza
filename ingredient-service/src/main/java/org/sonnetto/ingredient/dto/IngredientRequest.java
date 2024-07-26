@@ -16,6 +16,6 @@ public class IngredientRequest implements Serializable {
 
     @Valid
     public Ingredient toIngredient() {
-        return new Ingredient(null, name, type);
+        return new Ingredient(null, this.getName(), this.getType());
     }
 }
