@@ -34,7 +34,6 @@ services:
   user-service-redis:
     container_name: sonnetto-user-service-redis
     image: redis:7.2.5
-    restart: always
     ports:
       - '6379:6379'
     command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
@@ -76,7 +75,6 @@ services:
   ingredient-service-redis:
     container_name: sonnetto-ingredient-service-redis
     image: redis:7.2.5
-    restart: always
     command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
     volumes:
       - ingredient-service-cache:/data
@@ -116,7 +114,6 @@ services:
   dish-service-redis:
     container_name: sonnetto-dish-service-redis
     image: redis:7.2.5
-    restart: always
     command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
     volumes:
       - dish-service-cache:/data

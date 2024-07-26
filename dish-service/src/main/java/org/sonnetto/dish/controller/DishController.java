@@ -3,6 +3,7 @@ package org.sonnetto.dish.controller;
 import lombok.RequiredArgsConstructor;
 import org.sonnetto.dish.dto.DishRequest;
 import org.sonnetto.dish.dto.DishResponse;
+import org.sonnetto.dish.dto.FailureDishResponse;
 import org.sonnetto.dish.service.DishService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,8 +21,11 @@ public class DishController {
     private final DishService dishService;
 
     @PostMapping
-    public ResponseEntity<DishResponse> postDish(@RequestBody DishRequest userRequest) {
-        return new ResponseEntity<>(dishService.createDish(userRequest), HttpStatus.CREATED);
+    public ResponseEntity<DishResponse> postDish(@RequestBody DishRequest dishRequest) {
+        DishResponse dish = dishService.createDish(dishRequest);
+        HttpStatus status = HttpStatus.CREATED;
+        if (dish instanceof FailureDishResponse) status = HttpStatus.SERVICE_UNAVAILABLE;
+        return new ResponseEntity<>(dish, status);
     }
 
     @GetMapping
@@ -36,8 +40,11 @@ public class DishController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DishResponse> updateDish(@PathVariable Long id, @RequestBody DishRequest userRequest) {
-        return ResponseEntity.ok(dishService.updateDish(id, userRequest));
+    public ResponseEntity<DishResponse> updateDish(@PathVariable Long id, @RequestBody DishRequest dishRequest) {
+        DishResponse dish = dishService.updateDish(id, dishRequest);
+        HttpStatus status = HttpStatus.OK;
+        if (dish instanceof FailureDishResponse) status = HttpStatus.SERVICE_UNAVAILABLE;
+        return new ResponseEntity<>(dish, status);
     }
 
     @DeleteMapping("/{id}")

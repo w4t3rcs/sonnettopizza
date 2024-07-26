@@ -1,12 +1,12 @@
 package org.sonnetto.dish.entity;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.validator.constraints.Length;
+import org.sonnetto.dish.validation.IngredientIdList;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,6 +27,7 @@ public class Dish implements Serializable {
     @NotNull
     @Enumerated(EnumType.STRING)
     private Type type;
+    @IngredientIdList
     @ElementCollection
     private List<Long> ingredientIds;
 
