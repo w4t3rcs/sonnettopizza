@@ -1,36 +1,28 @@
 package org.sonnetto.dish.service.impl;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import org.sonnetto.dish.dto.DishRequest;
-import org.sonnetto.dish.exception.IngredientServiceUnavailableException;
+import lombok.extern.slf4j.Slf4j;
 import org.sonnetto.dish.service.IngredientChecker;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
+@Slf4j
 @Service
 public class IngredientCheckerImpl implements IngredientChecker {
     @Override
     @CircuitBreaker(name = "ingredient-service", fallbackMethod = "fallback")
-    public boolean checkExistence(DishRequest dishRequest) {
-        AtomicBoolean exists = new AtomicBoolean(true);
-        Flux.fromIterable(dishRequest.getIngredientIds())
-                .doOnNext(id -> WebClient.create("http://localhost:8082/api/v1.0/ingredients/" + id)
-                        .get()
-                        .retrieve()
-                        .onStatus(HttpStatusCode::isError, clientResponse -> {
-                            exists.set(false);
-                            return clientResponse.createException();
-                        }))
-                .collectList()
-                .block();
-        return exists.get();
+    public boolean checkExistence(Long id) {
+        return WebClient.create("http://localhost:8082/api/v1.0/ingredients/" + id)
+                .get()
+                .retrieve()
+                .toBodilessEntity()
+                .block()
+                .getStatusCode()
+                .is2xxSuccessful();
     }
 
-    private boolean fallback(DishRequest dishRequest, Throwable throwable) {
-        throw new IngredientServiceUnavailableException(dishRequest, throwable);
+    private boolean fallback(Long id, Throwable throwable) {
+        log.error("Oops, ingredient-service is currently unavailable! \n{}", throwable.getMessage());
+        return false;
     }
 }

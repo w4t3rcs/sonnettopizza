@@ -14,8 +14,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +29,10 @@ public class DishServiceImpl implements DishService {
     @Caching(cacheable = @Cacheable("dishCache"))
     @Transactional
     public DishResponse createDish(DishRequest dishRequest) {
-        ingredientChecker.checkExistence(dishRequest);
-        return DishResponse.fromDish(dishRepository.save(dishRequest.toDish()));
+        if (dishRequest.getIngredientIds()
+                .stream()
+                .allMatch(ingredientChecker::checkExistence)) return DishResponse.fromDish(dishRepository.save(dishRequest.toDish()));
+        else throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
     }
 
     @Override
@@ -54,8 +58,10 @@ public class DishServiceImpl implements DishService {
                 .orElseThrow(DishNotFoundException::new);
         if (dishRequest.getName() != null) dish.setName(dish.getName());
         if (dishRequest.getType() != null) dish.setType(dish.getType());
-        if (dishRequest.getIngredientIds() != null
-                && ingredientChecker.checkExistence(dishRequest)) dish.setIngredientIds(dish.getIngredientIds());
+        if (dishRequest.getIngredientIds() != null &&
+                dishRequest.getIngredientIds()
+                        .stream()
+                        .allMatch(ingredientChecker::checkExistence)) dish.setIngredientIds(dish.getIngredientIds());
         return DishResponse.fromDish(dishRepository.save(dish));
     }
 
