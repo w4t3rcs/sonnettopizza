@@ -18,6 +18,10 @@ spring:
             uri: lb://ingredient-service
             predicates:
               - Path=/api/v1.0/ingredients
+          - id: dish-service
+            uri: lb://dish-service
+            predicates:
+              - Path=/api/v1.0/dishes
           - id: eureka-server
             uri: http://eureka-server:8761
             predicates:
