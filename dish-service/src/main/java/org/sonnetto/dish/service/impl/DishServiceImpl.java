@@ -4,9 +4,9 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.sonnetto.dish.dto.DishRequest;
 import org.sonnetto.dish.dto.DishResponse;
-import org.sonnetto.dish.dto.FailureDishResponse;
 import org.sonnetto.dish.entity.Dish;
 import org.sonnetto.dish.exception.DishNotFoundException;
+import org.sonnetto.dish.exception.IngredientServiceUnavailableException;
 import org.sonnetto.dish.repository.DishRepository;
 import org.sonnetto.dish.service.DishService;
 import org.springframework.cache.annotation.CacheEvict;
@@ -68,6 +68,6 @@ public class DishServiceImpl implements DishService {
     }
 
     private DishResponse fallback(Throwable throwable) {
-        return new FailureDishResponse(throwable.getMessage());
+        throw new IngredientServiceUnavailableException();
     }
 }
