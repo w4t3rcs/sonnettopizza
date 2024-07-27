@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ConversionResponse implements Serializable {
-    @JsonProperty("base_code")
+    @JsonProperty("target_code")
     private String code;
     @JsonProperty("conversion_rate")
     private float conversionRate;
