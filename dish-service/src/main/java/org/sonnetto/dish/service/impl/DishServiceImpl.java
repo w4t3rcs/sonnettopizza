@@ -53,9 +53,10 @@ public class DishServiceImpl implements DishService {
     public DishResponse updateDish(Long id, DishRequest dishRequest) {
         Dish dish = dishRepository.findById(id)
                 .orElseThrow(DishNotFoundException::new);
-        if (dishRequest.getName() != null) dish.setName(dish.getName());
-        if (dishRequest.getType() != null) dish.setType(dish.getType());
-        if (dishRequest.getIngredientIds() != null) dish.setIngredientIds(dish.getIngredientIds());
+        if (dishRequest.getName() != null) dish.setName(dishRequest.getName());
+        if (dishRequest.getType() != null) dish.setType(dishRequest.getType());
+        if (dishRequest.getIngredientIds() != null) dish.setIngredientIds(dishRequest.getIngredientIds());
+
         return DishResponse.fromDish(dishRepository.save(dish));
     }
 
@@ -68,6 +69,6 @@ public class DishServiceImpl implements DishService {
     }
 
     private DishResponse fallback(Throwable throwable) {
-        throw new IngredientServiceUnavailableException();
+        throw new IngredientServiceUnavailableException(throwable);
     }
 }

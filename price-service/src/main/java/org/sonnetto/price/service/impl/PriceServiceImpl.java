@@ -110,6 +110,6 @@ public class PriceServiceImpl implements PriceService {
     }
 
     private PriceResponse fallback(Throwable throwable) {
-        throw new DishServiceUnavailableException();
+        throw new DishServiceUnavailableException(throwable);
     }
 }
