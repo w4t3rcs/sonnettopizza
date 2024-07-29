@@ -1,6 +1,8 @@
 package org.sonnetto.price.service.impl;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sonnetto.price.dto.ConversionRequest;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -35,8 +38,10 @@ public class PriceServiceImpl implements PriceService {
     @Caching(cacheable = @Cacheable("priceCache"))
     @Transactional
     @CircuitBreaker(name = "dish-service", fallbackMethod = "fallback")
-    public PriceResponse createPrice(PriceRequest priceRequest) {
-        return PriceResponse.fromPrice(priceRepository.save(priceRequest.toPrice()));
+    @TimeLimiter(name = "dish-service")
+    @Retry(name = "dish-service")
+    public CompletableFuture<PriceResponse> createPrice(PriceRequest priceRequest) {
+        return CompletableFuture.supplyAsync(() -> PriceResponse.fromPrice(priceRepository.save(priceRequest.toPrice())));
     }
 
     @Override
@@ -89,13 +94,15 @@ public class PriceServiceImpl implements PriceService {
     @Caching(put = @CachePut("priceCache"))
     @Transactional
     @CircuitBreaker(name = "dish-service", fallbackMethod = "fallback")
-    public PriceResponse updatePrice(Long id, PriceRequest priceRequest) {
+    @TimeLimiter(name = "dish-service")
+    @Retry(name = "dish-service")
+    public CompletableFuture<PriceResponse> updatePrice(Long id, PriceRequest priceRequest) {
         Price price = priceRepository.findById(id)
                 .orElseThrow(PriceNotFoundException::new);
         if (priceRequest.getCode() != null) price.setCode(priceRequest.getCode());
         if (priceRequest.getValue() != null) price.setValue(priceRequest.getValue());
         if (priceRequest.getDishId() != null) price.setDishId(priceRequest.getDishId());
-        return PriceResponse.fromPrice(priceRepository.save(price));
+        return CompletableFuture.supplyAsync(() -> PriceResponse.fromPrice(priceRepository.save(price)));
     }
 
     @Override
@@ -113,7 +120,7 @@ public class PriceServiceImpl implements PriceService {
         return priceResponse;
     }
 
-    private PriceResponse fallback(Throwable throwable) {
+    private CompletableFuture<PriceResponse> fallback(Throwable throwable) {
         log.error("{}\n{}" , throwable.getMessage(), Arrays.toString(throwable.getStackTrace()));
         throw new DishServiceUnavailableException(throwable);
     }

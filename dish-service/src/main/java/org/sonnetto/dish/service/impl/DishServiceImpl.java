@@ -1,6 +1,8 @@
 package org.sonnetto.dish.service.impl;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sonnetto.dish.dto.DishRequest;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -31,8 +34,10 @@ public class DishServiceImpl implements DishService {
     @Caching(cacheable = @Cacheable("dishCache"))
     @Transactional
     @CircuitBreaker(name = "ingredient-service", fallbackMethod = "fallback")
-    public DishResponse createDish(DishRequest dishRequest) {
-        return DishResponse.fromDish(dishRepository.save(dishRequest.toDish()));
+    @TimeLimiter(name = "ingredient-service")
+    @Retry(name = "ingredient-service")
+    public CompletableFuture<DishResponse> createDish(DishRequest dishRequest) {
+        return CompletableFuture.supplyAsync(() -> DishResponse.fromDish(dishRepository.save(dishRequest.toDish())));
     }
 
     @Override
@@ -54,14 +59,16 @@ public class DishServiceImpl implements DishService {
     @Caching(put = @CachePut("dishCache"))
     @Transactional
     @CircuitBreaker(name = "ingredient-service", fallbackMethod = "fallback")
-    public DishResponse updateDish(Long id, DishRequest dishRequest) {
+    @TimeLimiter(name = "ingredient-service")
+    @Retry(name = "ingredient-service")
+    public CompletableFuture<DishResponse> updateDish(Long id, DishRequest dishRequest) {
         Dish dish = dishRepository.findById(id)
                 .orElseThrow(DishNotFoundException::new);
         if (dishRequest.getName() != null) dish.setName(dishRequest.getName());
         if (dishRequest.getType() != null) dish.setType(dishRequest.getType());
         if (dishRequest.getIngredientIds() != null) dish.setIngredientIds(dishRequest.getIngredientIds());
 
-        return DishResponse.fromDish(dishRepository.save(dish));
+        return CompletableFuture.supplyAsync(() -> DishResponse.fromDish(dishRepository.save(dish)));
     }
 
     @Override
@@ -72,7 +79,7 @@ public class DishServiceImpl implements DishService {
         return id;
     }
 
-    private DishResponse fallback(Throwable throwable) {
+    private CompletableFuture<DishResponse> fallback(Throwable throwable) {
         log.error("{}\n{}" , throwable.getMessage(), Arrays.toString(throwable.getStackTrace()));
         throw new IngredientServiceUnavailableException(throwable);
     }

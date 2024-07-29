@@ -44,6 +44,19 @@ resilience4j:
           seconds: 5
         permitted-number-of-calls-in-half-open-state: 3
         automatic-transition-from-open-to-half-open-enabled: true
+        ignore-exceptions:
+          - org.springframework.web.bind.MethodArgumentNotValidException
+  timelimiter:
+    instances:
+      ingredient-service:
+        timeout-duration:
+          seconds: 3
+  retry:
+    instances:
+      ingredient-service:
+        max-attempts: 3
+        wait-duration:
+          seconds: 5
 eureka:
   client:
     service-url:

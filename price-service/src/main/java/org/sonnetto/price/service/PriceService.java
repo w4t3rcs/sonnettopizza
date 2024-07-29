@@ -5,8 +5,10 @@ import org.sonnetto.price.dto.PriceResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface PriceService {
-    PriceResponse createPrice(PriceRequest priceRequest);
+    CompletableFuture<PriceResponse> createPrice(PriceRequest priceRequest);
 
     PagedModel<PriceResponse> getPrices(Pageable pageable);
 
@@ -20,7 +22,7 @@ public interface PriceService {
 
     PriceResponse getConvertedPrice(Long id, String code);
 
-    PriceResponse updatePrice(Long id, PriceRequest priceRequest);
+    CompletableFuture<PriceResponse> updatePrice(Long id, PriceRequest priceRequest);
 
     Long deletePrice(Long id);
 }

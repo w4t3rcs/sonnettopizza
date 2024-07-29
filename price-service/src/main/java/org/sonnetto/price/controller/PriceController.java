@@ -9,9 +9,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedModel;
 import org.springframework.data.web.SortDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/v1.0/prices")
@@ -20,8 +21,8 @@ public class PriceController {
     private final PriceService priceService;
 
     @PostMapping
-    public ResponseEntity<PriceResponse> postPrice(@RequestBody PriceRequest priceRequest) {
-        return new ResponseEntity<>(priceService.createPrice(priceRequest), HttpStatus.CREATED);
+    public CompletableFuture<PriceResponse> postPrice(@RequestBody PriceRequest priceRequest) {
+        return priceService.createPrice(priceRequest);
     }
 
     @GetMapping
@@ -64,8 +65,8 @@ public class PriceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PriceResponse> updatePrice(@PathVariable Long id, @RequestBody PriceRequest priceRequest) {
-        return ResponseEntity.ok(priceService.updatePrice(id, priceRequest));
+    public CompletableFuture<PriceResponse> updatePrice(@PathVariable Long id, @RequestBody PriceRequest priceRequest) {
+        return priceService.updatePrice(id, priceRequest);
     }
 
     @DeleteMapping("/{id}")

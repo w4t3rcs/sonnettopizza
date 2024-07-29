@@ -1,6 +1,7 @@
 package org.sonnetto.dish.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.sonnetto.dish.dto.DishRequest;
 import org.sonnetto.dish.dto.DishResponse;
 import org.sonnetto.dish.service.DishService;
@@ -9,9 +10,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedModel;
 import org.springframework.data.web.SortDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/v1.0/dishes")
@@ -19,9 +21,10 @@ import org.springframework.web.bind.annotation.*;
 public class DishController {
     private final DishService dishService;
 
+    @SneakyThrows
     @PostMapping
-    public ResponseEntity<DishResponse> postDish(@RequestBody DishRequest dishRequest) {
-        return new ResponseEntity<>(dishService.createDish(dishRequest), HttpStatus.CREATED);
+    public CompletableFuture<DishResponse> postDish(@RequestBody DishRequest dishRequest) {
+        return dishService.createDish(dishRequest);
     }
 
     @GetMapping
@@ -35,9 +38,10 @@ public class DishController {
         return ResponseEntity.ok(dishService.getDish(id));
     }
 
+    @SneakyThrows
     @PutMapping("/{id}")
-    public ResponseEntity<DishResponse> updateDish(@PathVariable Long id, @RequestBody DishRequest dishRequest) {
-        return ResponseEntity.ok(dishService.updateDish(id, dishRequest));
+    public CompletableFuture<DishResponse> updateDish(@PathVariable Long id, @RequestBody DishRequest dishRequest) {
+        return dishService.updateDish(id, dishRequest);
     }
 
     @DeleteMapping("/{id}")
