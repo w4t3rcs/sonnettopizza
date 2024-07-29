@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
+import org.sonnetto.price.validation.DishId;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -24,6 +25,7 @@ public class Price implements Serializable {
     private Float value;
     @NotBlank
     private String code;
+    @DishId
     @Column(unique = true)
     private Long dishId;
 

@@ -2,6 +2,7 @@ package org.sonnetto.dish.service.impl;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sonnetto.dish.dto.DishRequest;
 import org.sonnetto.dish.dto.DishResponse;
 import org.sonnetto.dish.entity.Dish;
@@ -18,6 +19,9 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DishServiceImpl implements DishService {
@@ -69,6 +73,7 @@ public class DishServiceImpl implements DishService {
     }
 
     private DishResponse fallback(Throwable throwable) {
+        log.error("{}\n{}" , throwable.getMessage(), Arrays.toString(throwable.getStackTrace()));
         throw new IngredientServiceUnavailableException(throwable);
     }
 }
