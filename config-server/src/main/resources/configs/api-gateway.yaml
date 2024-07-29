@@ -5,7 +5,7 @@ spring:
 #    oauth2:
 #      resourceserver:
 #        jwt:
-#          issuer-uri: http://localhost:8282/realms/sonnetto-realm
+#          issuer-uri: http://keycloak:8282/realms/sonnetto-realm
   cloud:
     gateway:
       mvc:
@@ -22,6 +22,10 @@ spring:
             uri: lb://dish-service
             predicates:
               - Path=/api/v1.0/dishes
+          - id: price-service
+            uri: lb://price-service
+            predicates:
+              - Path=/api/v1.0/prices
           - id: eureka-server
             uri: http://eureka-server:8761
             predicates:
