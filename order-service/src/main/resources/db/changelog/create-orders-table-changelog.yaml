@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: w4t3rcs
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  autoIncrement: true
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_country
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_city
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_street
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_house
+                  type: varchar(8)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price_ids
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purchase_summary
+                  type: float(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purchase_code
+                  type: varchar(3)
+                  defaultValue: USD
+                  constraints:
+                    nullable: false

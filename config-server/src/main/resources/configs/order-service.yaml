@@ -1,0 +1,63 @@
+server:
+  port: 8085
+spring:
+  datasource:
+    username: user
+    password: password
+    url: jdbc:mysql://order-service-mysql:3306
+    name: orderdb
+    hikari:
+      initialization-fail-timeout: 0
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  cache:
+    type: redis
+    redis:
+      cache-null-values: false
+      enable-statistics: true
+      time-to-live: 2m
+  data:
+    redis:
+      host: order-service-redis
+      password: password
+      port: 6379
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    show_details: always
+    circuitbreakers: enabled
+resilience4j:
+  circuitbreaker:
+    instances:
+      user-and-price-service:
+        register-health-indicator: true
+        event-consumer-buffer-size: 10
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state:
+          seconds: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        ignore-exceptions:
+          - org.springframework.web.bind.MethodArgumentNotValidException
+  timelimiter:
+    instances:
+      user-and-price-service:
+        timeout-duration:
+          seconds: 3
+  retry:
+    instances:
+      user-and-price-service:
+        max-attempts: 3
+        wait-duration:
+          seconds: 5
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
