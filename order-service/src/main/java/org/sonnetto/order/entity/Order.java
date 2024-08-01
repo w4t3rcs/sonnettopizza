@@ -5,11 +5,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
-import org.sonnetto.order.validation.PriceIdList;
 import org.sonnetto.order.validation.UserId;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 @Getter @Setter
@@ -20,19 +18,17 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @NotNull
-    @UserId
-    private Long userId;
     @Valid
     @Embedded
     private Address address;
-    @NotNull
-    @PriceIdList
-    @ElementCollection
-    private List<Long> priceIds;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @Valid
     @Embedded
     private Purchase purchase;
+    @NotNull
+    @UserId
+    private Long userId;
 
     @Override
     public final boolean equals(Object o) {

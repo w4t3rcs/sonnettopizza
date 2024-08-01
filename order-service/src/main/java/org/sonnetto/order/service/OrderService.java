@@ -1,0 +1,25 @@
+package org.sonnetto.order.service;
+
+import org.sonnetto.order.dto.OrderRequest;
+import org.sonnetto.order.dto.OrderResponse;
+import org.sonnetto.order.entity.Status;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
+
+public interface OrderService {
+    OrderResponse createOrder(OrderRequest orderRequest);
+
+    PagedModel<OrderResponse> getOrders(Pageable pageable);
+
+    PagedModel<OrderResponse> getOrdersByStatus(Status status, Pageable pageable);
+
+    PagedModel<OrderResponse> getOrdersByAddressStreet(String street, Pageable pageable);
+
+    PagedModel<OrderResponse> getOrdersByAddressPostalCode(String postalCode, Pageable pageable);
+
+    OrderResponse getOrder(Long id);
+
+    OrderResponse updateOrder(Long id, OrderRequest orderRequest);
+
+    Long deleteOrder(Long id);
+}

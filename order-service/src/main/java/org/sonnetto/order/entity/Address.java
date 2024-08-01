@@ -4,6 +4,7 @@ import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.sonnetto.order.validation.HouseNumber;
+import org.sonnetto.order.validation.PostalCode;
 
 import java.io.Serializable;
 
@@ -17,5 +18,7 @@ public class Address implements Serializable {
     @NotBlank
     private String street;
     @HouseNumber
-    private String house;
+    private String houseNumber;
+    @PostalCode
+    private String postalCode;
 }

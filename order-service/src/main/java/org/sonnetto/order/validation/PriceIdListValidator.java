@@ -10,6 +10,7 @@ public class PriceIdListValidator extends HttpResourceIdValidator<PriceIdList, L
 
     @Override
     public boolean isValid(List<Long> ids, ConstraintValidatorContext constraintValidatorContext) {
+        if (ids == null || ids.isEmpty()) return false;
         return Boolean.TRUE.equals(Flux.fromIterable(ids)
                 .map(id -> this.isResourceValid(PRICE_ID, id))
                 .all(Boolean::booleanValue)

@@ -14,11 +14,6 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: user_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-              - column:
                   name: address_country
                   type: varchar(64)
                   constraints:
@@ -34,12 +29,23 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: address_house
-                  type: varchar(8)
+                  name: address_house_number
+                  type: varchar(16)
                   constraints:
                     nullable: false
               - column:
-                  name: price_ids
+                  name: address_postal_code
+                  type: varchar(16)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(16)
+                  defaultValue: NOT_CONFIRMED
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purchase_price_ids
                   type: varchar(256)
                   constraints:
                     nullable: false
@@ -52,5 +58,25 @@ databaseChangeLog:
                   name: purchase_code
                   type: varchar(3)
                   defaultValue: USD
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purchase_credit_card_number
+                  type: varchar(19)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purchase_credit_card_expiry_date
+                  type: varchar(8)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purchase_credit_card_cvc
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
                   constraints:
                     nullable: false
