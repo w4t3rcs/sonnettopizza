@@ -61,3 +61,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://eureka-server:8761/eureka/
+stripe:
+  secret-key: sk_test_51Pj5rhP9Ug6EI0Vqp9zfHWT6eYn3LgqQuy0C4kfHh7VCAV4PkYUNZR8TCCDcAWTFQgHdCBLNnRBNNvpG1nvVLmvT00Ymfdd2r9
+  client:
+    success-url: http://frontend:3000/payment/success
+    failure-url: http://frontend:3000/payment/failure
