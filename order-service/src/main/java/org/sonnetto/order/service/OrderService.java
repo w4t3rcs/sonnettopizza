@@ -13,9 +13,13 @@ public interface OrderService {
 
     PagedModel<OrderResponse> getOrdersByStatus(Status status, Pageable pageable);
 
-    PagedModel<OrderResponse> getOrdersByAddressStreet(String street, Pageable pageable);
+    PagedModel<OrderResponse> getOrdersByCity(String city, Pageable pageable);
 
-    PagedModel<OrderResponse> getOrdersByAddressPostalCode(String postalCode, Pageable pageable);
+    PagedModel<OrderResponse> getOrdersByStreet(String street, Pageable pageable);
+
+    PagedModel<OrderResponse> getOrdersByPostalCode(String postalCode, Pageable pageable);
+
+    PagedModel<OrderResponse> getOrdersByUserId(Long userId, Pageable pageable);
 
     OrderResponse getOrder(Long id);
 

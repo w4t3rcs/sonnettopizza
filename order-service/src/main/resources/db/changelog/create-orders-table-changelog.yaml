@@ -41,7 +41,7 @@ databaseChangeLog:
               - column:
                   name: status
                   type: varchar(16)
-                  defaultValue: NOT_CONFIRMED
+                  defaultValue: NOT_PAID
                   constraints:
                     nullable: false
               - column:
@@ -61,18 +61,8 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: purchase_credit_card_number
-                  type: varchar(19)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: purchase_credit_card_expiry_date
-                  type: varchar(8)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: purchase_credit_card_cvc
-                  type: varchar(4)
+                  name: purchase_payment_url
+                  type: varchar(128)
                   constraints:
                     nullable: false
               - column:

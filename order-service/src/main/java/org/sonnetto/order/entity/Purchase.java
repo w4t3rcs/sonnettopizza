@@ -2,7 +2,6 @@ package org.sonnetto.order.entity;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -24,6 +23,6 @@ public class Purchase implements Serializable {
     private Float summary;
     @NotBlank
     private String code;
-    @Embedded
-    private CreditCard creditCard;
+    @NotBlank
+    private String paymentUrl;
 }

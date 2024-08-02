@@ -177,6 +177,45 @@ services:
       - price-service-redis
     networks:
       - sonnetto
+  order-service-mysql:
+    container_name: sonnetto-order-service-mysql
+    image: mysql:9
+    environment:
+      MYSQL_DATABASE: ${MYSQL_ORDER_SERVICE_DB}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - order-service-db:/var/lib/mysql
+    networks:
+      - sonnetto
+  order-service-redis:
+    container_name: sonnetto-order-service-redis
+    image: redis:7.2.5
+    command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - order-service-cache:/data
+    networks:
+      - sonnetto
+  order-service:
+    container_name: sonnetto-order-service
+    image: w4t3rcs/sonnetto-order-service:latest
+    pull_policy: always
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_DATASOURCE_URL: ${MYSQL_ORDER_SERVICE_URL}/${MYSQL_ORDER_SERVICE_DB}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+    ports:
+      - '8085:8085'
+    depends_on:
+      - eureka-server
+      - config-server
+      - price-service-mysql
+      - price-service-redis
+    networks:
+      - sonnetto
   keycloak-mysql:
     container_name: sonnetto-keycloak-mysql
     image: mysql:9
@@ -250,6 +289,8 @@ volumes:
   dish-service-cache:
   price-service-db:
   price-service-cache:
+  order-service-db:
+  order-service-cache:
   keycloak_db:
 
 networks:

@@ -12,12 +12,13 @@ import java.io.Serializable;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderRequest implements Serializable {
-    private Long userId;
     private Address address;
+    private Status status;
     private PurchaseRequest purchase;
+    private Long userId;
 
     @Valid
     public Order toOrder() {
-        return new Order(null, address, Status.NOT_CONFIRMED, purchase.toPurchase(), userId);
+        return new Order(null, address, status, purchase.toPurchase(), userId);
     }
 }
