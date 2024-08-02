@@ -268,14 +268,17 @@ services:
       - ingredient-service-mysql
       - dish-service-mysql
       - price-service-mysql
+      - order-service-mysql
       - user-service-redis
       - ingredient-service-redis
       - dish-service-redis
       - price-service-redis
+      - order-service-redis
       - user-service
       - ingredient-service
       - dish-service
       - price-service
+      - order-service
 #      - keycloak-mysql
 #      - keycloak
     networks:
