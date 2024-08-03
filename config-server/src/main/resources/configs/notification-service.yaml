@@ -25,6 +25,9 @@ spring:
       port: 6379
   kafka:
     bootstrap-servers: broker:9092
+    admin:
+      fail-fast: true
+      modify-topic-configs: true
     consumer:
       group-id: notification-group-id
       auto-offset-reset: earliest
