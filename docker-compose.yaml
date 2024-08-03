@@ -17,23 +17,29 @@ services:
       - eureka-server
     networks:
       - sonnetto
-  kafka:
-    image: apache/kafka:3.8.0
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.0.1
+    container_name: sonnetto-zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  broker:
+    image: confluentinc/cp-kafka:7.0.1
     container_name: sonnetto-kafka
     environment:
-      KAFKA_NODE_ID: 1
-      KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_LISTENERS: PLAINTEXT://localhost:9092,CONTROLLER://localhost:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
     ports:
-      - 9092:9092
+      - '9092:9092'
     networks:
       - sonnetto
   user-service-mysql:
@@ -75,7 +81,7 @@ services:
     depends_on:
       - eureka-server
       - config-server
-      - kafka
+      - broker
       - user-service-mysql
       - user-service-redis
     networks:
@@ -232,7 +238,7 @@ services:
     depends_on:
       - eureka-server
       - config-server
-      - kafka
+      - broker
       - order-service-mysql
       - order-service-redis
     networks:
@@ -272,7 +278,7 @@ services:
     depends_on:
       - eureka-server
       - config-server
-      - kafka
+      - broker
       - notification-service-mysql
       - notification-service-redis
     networks:
@@ -325,7 +331,7 @@ services:
     depends_on:
       - eureka-server
       - config-server
-      - kafka
+      - broker
       - user-service-mysql
       - ingredient-service-mysql
       - dish-service-mysql

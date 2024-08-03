@@ -24,7 +24,7 @@ spring:
       password: password
       port: 6379
   kafka:
-    bootstrap-servers: broker:9092
+    bootstrap-servers: broker:29092
     consumer:
       group-id: notification-group-id
       auto-offset-reset: earliest
