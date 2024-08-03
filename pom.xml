@@ -21,8 +21,9 @@
         <module>ingredient-service</module>
         <module>dish-service</module>
         <module>price-service</module>
+        <module>order-service</module>
+        <module>notification-service</module>
         <module>api-gateway</module>
-<!--        <module>notification-service</module>-->
 <!--        <module>support-service</module>-->
     </modules>
     <properties>

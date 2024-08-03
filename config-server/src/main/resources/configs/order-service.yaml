@@ -23,6 +23,11 @@ spring:
       host: order-service-redis
       password: password
       port: 6379
+  kafka:
+    bootstrap-servers: kafka:9092
+    producer:
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 management:
   endpoints:
     web:
