@@ -77,6 +77,7 @@ services:
     depends_on:
       - eureka-server
       - config-server
+      - kafka
       - user-service-mysql
       - user-service-redis
     networks:
@@ -233,8 +234,49 @@ services:
     depends_on:
       - eureka-server
       - config-server
-      - price-service-mysql
-      - price-service-redis
+      - kafka
+      - order-service-mysql
+      - order-service-redis
+    networks:
+      - sonnetto
+  notification-service-mysql:
+    container_name: sonnetto-notification-service-mysql
+    image: mysql:9
+    environment:
+      MYSQL_DATABASE: ${MYSQL_NOTIFICATION_SERVICE_DB}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - notification-service-db:/var/lib/mysql
+    networks:
+      - sonnetto
+  notification-service-redis:
+    container_name: sonnetto-notification-service-redis
+    image: redis:7.2.5
+    command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - notification-service-cache:/data
+    networks:
+      - sonnetto
+  notification-service:
+    container_name: sonnetto-notification-service
+    image: w4t3rcs/sonnetto-notification-service:latest
+    pull_policy: always
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_DATASOURCE_URL: ${MYSQL_NOTIFICATION_SERVICE_URL}/${MYSQL_NOTIFICATION_SERVICE_DB}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+    ports:
+      - '8086:8086'
+    depends_on:
+      - eureka-server
+      - config-server
+      - kafka
+      - notification-service-mysql
+      - notification-service-redis
     networks:
       - sonnetto
   keycloak-mysql:
@@ -291,16 +333,19 @@ services:
       - dish-service-mysql
       - price-service-mysql
       - order-service-mysql
+      - notification-service-mysql
       - user-service-redis
       - ingredient-service-redis
       - dish-service-redis
       - price-service-redis
       - order-service-redis
+      - notification-service-redis
       - user-service
       - ingredient-service
       - dish-service
       - price-service
       - order-service
+      - notification-service
 #      - keycloak-mysql
 #      - keycloak
     networks:
@@ -316,6 +361,8 @@ volumes:
   price-service-cache:
   order-service-db:
   order-service-cache:
+  notification-service-db:
+  notification-service-cache:
   keycloak_db:
 
 networks:

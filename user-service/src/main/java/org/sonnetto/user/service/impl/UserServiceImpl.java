@@ -13,6 +13,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     @Caching(cacheable = @Cacheable("userCache"))
     @Transactional
     public UserResponse createUser(UserRequest userRequest) {
-        return UserResponse.fromUser(userRepository.save(userRequest.toUser()));
+        UserResponse userResponse = UserResponse.fromUser(userRepository.save(userRequest.toUser()));
+        kafkaTemplate.send("user-creation-topic", userResponse.getName());
+        return userResponse;
     }
 
     @Override
@@ -53,7 +57,9 @@ public class UserServiceImpl implements UserService {
         if (userRequest.getPassword() != null) user.setPassword(userRequest.getPassword());
         if (userRequest.getEmail() != null) user.setEmail(userRequest.getEmail());
         if (userRequest.getRole() != null) user.setRole(userRequest.getRole());
-        return UserResponse.fromUser(userRepository.save(user));
+        UserResponse userResponse = UserResponse.fromUser(userRepository.save(user));
+        kafkaTemplate.send("user-update-topic", userResponse.getName());
+        return userResponse;
     }
 
     @Override

@@ -26,6 +26,14 @@ spring:
             uri: lb://price-service
             predicates:
               - Path=/api/v1.0/prices
+          - id: order-service
+            uri: lb://order-service
+            predicates:
+              - Path=/api/v1.0/orders
+          - id: notification-service
+            uri: lb://notification-service
+            predicates:
+              - Path=/api/v1.0/notifications
           - id: eureka-server
             uri: http://eureka-server:8761
             predicates:
