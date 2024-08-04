@@ -25,9 +25,6 @@ spring:
       port: 6379
   kafka:
     bootstrap-servers: broker:9092
-    admin:
-      fail-fast: true
-      modify-topic-configs: true
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
