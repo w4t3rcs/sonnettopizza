@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserConsumerServiceImpl implements UserConsumerService {
     @Override
-    @KafkaListener(topics = "user-creation-topic", groupId = "notification-group-id")
+    @KafkaListener(topics = "user.created", groupId = "notification-group-id")
     public void listenUserCreation(String name) {
         log.info("User created: {}", name);
     }
 
     @Override
-    @KafkaListener(topics = "user-update-topic", groupId = "notification-group-id")
+    @KafkaListener(topics = "user.updated", groupId = "notification-group-id")
     public void listenUserUpdate(String name) {
         log.info("User updated: {}", name);
     }
