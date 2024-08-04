@@ -26,6 +26,7 @@ spring:
   kafka:
     bootstrap-servers: broker:9092
     admin:
+      auto-create: false
       fail-fast: true
     producer:
       retries: 3
