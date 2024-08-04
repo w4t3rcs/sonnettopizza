@@ -24,8 +24,11 @@ spring:
       password: password
       port: 6379
   kafka:
-    bootstrap-servers: broker:9092
+    bootstrap-servers: broker:19092
+    admin:
+      fail-fast: true
     producer:
+      retries: 3
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 management:
