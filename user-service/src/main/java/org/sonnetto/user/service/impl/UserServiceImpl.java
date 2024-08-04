@@ -1,6 +1,7 @@
 package org.sonnetto.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.sonnetto.user.dto.UserMessage;
 import org.sonnetto.user.dto.UserRequest;
 import org.sonnetto.user.dto.UserResponse;
 import org.sonnetto.user.entity.User;
@@ -21,15 +22,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, UserMessage> kafkaTemplate;
 
     @Override
     @Caching(cacheable = @Cacheable("userCache"))
     @Transactional
     public UserResponse createUser(UserRequest userRequest) {
-        UserResponse userResponse = UserResponse.fromUser(userRepository.save(userRequest.toUser()));
-        kafkaTemplate.send("user.created", userResponse.getEmail());
-        return userResponse;
+        User user = userRepository.save(userRequest.toUser());
+        kafkaTemplate.send("user.created", UserMessage.fromUser(user));
+        return UserResponse.fromUser(user);
     }
 
     @Override
@@ -57,9 +58,9 @@ public class UserServiceImpl implements UserService {
         if (userRequest.getPassword() != null) user.setPassword(userRequest.getPassword());
         if (userRequest.getEmail() != null) user.setEmail(userRequest.getEmail());
         if (userRequest.getRole() != null) user.setRole(userRequest.getRole());
-        UserResponse userResponse = UserResponse.fromUser(userRepository.save(user));
-        kafkaTemplate.send("user.updated", userResponse.getEmail());
-        return userResponse;
+        User updatedUser = userRepository.save(user);
+        kafkaTemplate.send("user.updated", UserMessage.fromUser(updatedUser));
+        return UserResponse.fromUser(updatedUser);
     }
 
     @Override
