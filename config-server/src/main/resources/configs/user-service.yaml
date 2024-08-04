@@ -25,6 +25,7 @@ spring:
       port: 6379
   kafka:
     bootstrap-servers: broker:9092
+
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
