@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse createUser(UserRequest userRequest) {
         UserResponse userResponse = UserResponse.fromUser(userRepository.save(userRequest.toUser()));
-        kafkaTemplate.send("user-creation-topic", userResponse.getName());
+        kafkaTemplate.send("user.created", userResponse.getEmail());
         return userResponse;
     }
 
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         if (userRequest.getEmail() != null) user.setEmail(userRequest.getEmail());
         if (userRequest.getRole() != null) user.setRole(userRequest.getRole());
         UserResponse userResponse = UserResponse.fromUser(userRepository.save(user));
-        kafkaTemplate.send("user-update-topic", userResponse.getName());
+        kafkaTemplate.send("user.updated", userResponse.getEmail());
         return userResponse;
     }
 
