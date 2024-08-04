@@ -26,9 +26,9 @@ spring:
   kafka:
     bootstrap-servers: broker:9092
     admin:
-      client-id: ''
       fail-fast: true
     producer:
+      retries: 3
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 management:
