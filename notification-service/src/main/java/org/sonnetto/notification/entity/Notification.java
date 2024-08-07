@@ -1,8 +1,7 @@
 package org.sonnetto.notification.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -19,13 +18,9 @@ public class Notification implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @NotBlank
-    private String target;
-    @NotBlank
-    private String message;
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private MessageType messageType;
+    @Valid
+    @Embedded
+    private Message message;
     @PastOrPresent
     private LocalDateTime sentDate;
 

@@ -8,11 +8,11 @@ import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
-public class UserMessage implements Serializable {
+public class UserEvent implements Serializable {
     private String name;
     private String email;
 
-    public static UserMessage fromUser(User user) {
-        return new UserMessage(user.getName(), user.getEmail());
+    public static UserEvent fromUser(User user) {
+        return new UserEvent(user.getName(), user.getEmail());
     }
 }

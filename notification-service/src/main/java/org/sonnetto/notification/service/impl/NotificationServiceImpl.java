@@ -3,41 +3,49 @@ package org.sonnetto.notification.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.sonnetto.notification.dto.NotificationRequest;
 import org.sonnetto.notification.dto.NotificationResponse;
-import org.sonnetto.notification.entity.MessageType;
+import org.sonnetto.notification.entity.Message;
+import org.sonnetto.notification.entity.Notification;
+import org.sonnetto.notification.exception.NotificationNotFoundException;
 import org.sonnetto.notification.repository.NotificationRepository;
+import org.sonnetto.notification.sender.MessageSender;
 import org.sonnetto.notification.service.NotificationService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
-
-import java.awt.print.Pageable;
 
 @Service
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
+    private final MessageSender messageSender;
 
     @Override
     public void sendNotification(NotificationRequest notificationRequest) {
-
+        Notification notification = notificationRepository.save(notificationRequest.toNotification());
+        messageSender.send(notification.getMessage());
     }
 
     @Override
     public PagedModel<NotificationResponse> getNotifications(Pageable pageable) {
-        return null;
+        return new PagedModel<>(notificationRepository.findAll(pageable)
+                .map(NotificationResponse::fromNotification));
     }
 
     @Override
     public PagedModel<NotificationResponse> getNotificationsByTarget(String target, Pageable pageable) {
-        return null;
+        return new PagedModel<>(notificationRepository.findAllByMessageTarget(target, pageable)
+                .map(NotificationResponse::fromNotification));
     }
 
     @Override
-    public PagedModel<NotificationResponse> getNotificationsByType(MessageType messageType, Pageable pageable) {
-        return null;
+    public PagedModel<NotificationResponse> getNotificationsByType(Message.Type messageType, Pageable pageable) {
+        return new PagedModel<>(notificationRepository.findAllByMessageType(messageType, pageable)
+                .map(NotificationResponse::fromNotification));
     }
 
     @Override
     public NotificationResponse getNotification(Long id) {
-        return null;
+        return NotificationResponse.fromNotification(notificationRepository.findById(id)
+                .orElseThrow(NotificationNotFoundException::new));
     }
 }

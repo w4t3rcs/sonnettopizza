@@ -14,12 +14,17 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: target
+                  name: message_target
                   type: varchar(512)
                   constraints:
                     nullable: false
               - column:
-                  name: message
+                  name: message_subject
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: message_body
                   type: varchar(1024)
                   constraints:
                     nullable: false

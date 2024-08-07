@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class UserMessage implements Serializable {
+public class UserEvent implements Serializable {
     private String name;
     private String email;
 }
