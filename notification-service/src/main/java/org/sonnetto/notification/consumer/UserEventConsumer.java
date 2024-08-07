@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserConsumer {
+public class UserEventConsumer {
     private final NotificationService notificationService;
 
     @KafkaListener(topics = "user.created", groupId = "notification-group-id")
