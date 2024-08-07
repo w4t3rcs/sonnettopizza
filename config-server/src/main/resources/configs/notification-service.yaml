@@ -36,7 +36,7 @@ spring:
         spring:
           json:
             trusted:
-              packages: *
+              packages: '*'
   mail:
     host: smtp.gmail.com
     port: 587
