@@ -16,24 +16,28 @@ public class UserEventConsumer {
     private final NotificationService notificationService;
 
     @KafkaListener(topics = "user.created", groupId = "notification-group-id")
-    public void listenUserCreation(UserEvent userEvent) {
+    public void processUserCreation(UserEvent userEvent) {
+        String subject = "Successful account creation";
+        String formattedBody = "Greetings, %s!\n\nWe're lucky to inform you about your account has been created successfully! Have an unforgettable experience with SonnettoPizza!\n\nSonnettoPizza"
+                .formatted(userEvent.getName());
         NotificationRequest notificationRequest = NotificationRequest.builder()
                 .target(userEvent.getEmail())
-                .subject("Successful account creation")
-                .body("Greetings %s!\n\nWe're lucky to inform you about your account has been created successfully! Have an unforgettable experience with SonnettoPizza!\n\nSonnettoPizza"
-                        .formatted(userEvent.getName()))
+                .subject(subject)
+                .body(formattedBody)
                 .messageType(Message.Type.USER_CREATED)
                 .build();
         notificationService.sendNotification(notificationRequest);
     }
 
     @KafkaListener(topics = "user.updated", groupId = "notification-group-id")
-    public void listenUserUpdate(UserEvent userEvent) {
+    public void processUserUpdate(UserEvent userEvent) {
+        String subject = "Successful account update";
+        String formattedBody = "Greetings, %s!\n\nWe would like to inform that your account has been updated successfully! Have a great day with SonnettoPizza!\n\nSonnettoPizza"
+                .formatted(userEvent.getName());
         NotificationRequest notificationRequest = NotificationRequest.builder()
                 .target(userEvent.getEmail())
-                .subject("Successful account update")
-                .body("Greetings %s!\n\nWe would like to inform that your account has been updated successfully! Have a great day with SonnettoPizza!\n\nSonnettoPizza"
-                        .formatted(userEvent.getName()))
+                .subject(subject)
+                .body(formattedBody)
                 .messageType(Message.Type.USER_UPDATED)
                 .build();
         notificationService.sendNotification(notificationRequest);
