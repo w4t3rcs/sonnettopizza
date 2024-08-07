@@ -35,6 +35,8 @@ spring:
       properties:
         spring:
           json:
+            type:
+              mapping: user:org.sonnetto.notification.dto.UserEvent
             trusted:
               packages: '*'
   mail:

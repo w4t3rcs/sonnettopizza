@@ -34,9 +34,8 @@ spring:
     properties:
       spring:
         json:
-          add:
-            type:
-              headers: false
+          type:
+            mapping: user:org.sonnetto.user.dto.UserEvent
 management:
   endpoints:
     web:
