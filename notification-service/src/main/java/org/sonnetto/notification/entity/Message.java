@@ -25,6 +25,8 @@ public class Message implements Serializable {
 
     public enum Type {
         USER_CREATED,
-        USER_UPDATED
+        USER_UPDATED,
+        ORDER_CREATED,
+        ORDER_UPDATED
     }
 }
