@@ -1,8 +1,7 @@
 package org.sonnetto.order.service;
 
-import org.sonnetto.order.dto.OrderRequest;
-import org.sonnetto.order.dto.PaymentResponse;
+import org.sonnetto.order.entity.Order;
 
 public interface PaymentService {
-    PaymentResponse processPayment(OrderRequest orderRequest);
+    void processPayment(Order order);
 }

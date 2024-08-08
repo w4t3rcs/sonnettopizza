@@ -3,10 +3,8 @@ package org.sonnetto.order.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.sonnetto.order.dto.OrderRequest;
 import org.sonnetto.order.dto.OrderResponse;
-import org.sonnetto.order.dto.PaymentResponse;
 import org.sonnetto.order.entity.Address;
 import org.sonnetto.order.entity.Order;
-import org.sonnetto.order.entity.Purchase;
 import org.sonnetto.order.entity.Status;
 import org.sonnetto.order.exception.OrderNotFoundException;
 import org.sonnetto.order.repository.OrderRepository;
@@ -32,10 +30,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderResponse createOrder(OrderRequest orderRequest) {
         Order order = orderRequest.toOrder();
-        PaymentResponse paymentResponse = paymentService.processPayment(orderRequest);
-        Purchase purchase = order.getPurchase();
-        purchase.setSummary(paymentResponse.getSummary());
-        purchase.setPaymentUrl(paymentResponse.getUrl());
+        paymentService.processPayment(order);
         return OrderResponse.fromOrder(orderRepository.save(order));
     }
 
