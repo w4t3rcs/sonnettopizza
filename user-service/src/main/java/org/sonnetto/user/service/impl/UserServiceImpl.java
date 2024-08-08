@@ -1,11 +1,11 @@
 package org.sonnetto.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.sonnetto.user.dto.UserEvent;
 import org.sonnetto.user.dto.UserRequest;
 import org.sonnetto.user.dto.UserResponse;
 import org.sonnetto.user.entity.User;
 import org.sonnetto.user.exception.UserNotFoundException;
+import org.sonnetto.user.producer.UserProducer;
 import org.sonnetto.user.repository.UserRepository;
 import org.sonnetto.user.service.UserService;
 import org.springframework.cache.annotation.CacheEvict;
@@ -14,7 +14,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final KafkaTemplate<String, UserEvent> kafkaTemplate;
+    private final UserProducer userProducer;
 
     @Override
     @Caching(cacheable = @Cacheable("userCache"))
     @Transactional
     public UserResponse createUser(UserRequest userRequest) {
         User user = userRepository.save(userRequest.toUser());
-        kafkaTemplate.send("user.created", UserEvent.fromUser(user));
+        userProducer.sendUser("user.created", user);
         return UserResponse.fromUser(user);
     }
 
@@ -59,7 +58,7 @@ public class UserServiceImpl implements UserService {
         if (userRequest.getEmail() != null) user.setEmail(userRequest.getEmail());
         if (userRequest.getRole() != null) user.setRole(userRequest.getRole());
         User updatedUser = userRepository.save(user);
-        kafkaTemplate.send("user.updated", UserEvent.fromUser(updatedUser));
+        userProducer.sendUser("user.updated", updatedUser);
         return UserResponse.fromUser(updatedUser);
     }
 

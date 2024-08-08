@@ -7,6 +7,7 @@ import org.sonnetto.order.entity.Address;
 import org.sonnetto.order.entity.Order;
 import org.sonnetto.order.entity.Status;
 import org.sonnetto.order.exception.OrderNotFoundException;
+import org.sonnetto.order.producer.OrderProducer;
 import org.sonnetto.order.repository.OrderRepository;
 import org.sonnetto.order.service.OrderService;
 import org.sonnetto.order.service.PaymentService;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final PaymentService paymentService;
+    private final OrderProducer orderProducer;
 
     @Override
     @Caching(cacheable = @Cacheable("orderCache"))
@@ -31,7 +33,9 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse createOrder(OrderRequest orderRequest) {
         Order order = orderRequest.toOrder();
         paymentService.processPayment(order);
-        return OrderResponse.fromOrder(orderRepository.save(order));
+        Order savedOrder = orderRepository.save(order);
+        orderProducer.sendOrder("order.created", savedOrder);
+        return OrderResponse.fromOrder(savedOrder);
     }
 
     @Override
@@ -108,7 +112,9 @@ public class OrderServiceImpl implements OrderService {
             order.setUserId(order.getUserId());
         }
 
-        return OrderResponse.fromOrder(orderRepository.save(order));
+        Order updatedOrder = orderRepository.save(order);
+        orderProducer.sendOrder("order.updated", updatedOrder);
+        return OrderResponse.fromOrder(updatedOrder);
     }
 
     @Override
