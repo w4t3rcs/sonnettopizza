@@ -9,9 +9,12 @@ import org.sonnetto.notification.exception.NotificationNotFoundException;
 import org.sonnetto.notification.repository.NotificationRepository;
 import org.sonnetto.notification.sender.MessageSender;
 import org.sonnetto.notification.service.NotificationService;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,30 +23,36 @@ public class NotificationServiceImpl implements NotificationService {
     private final MessageSender messageSender;
 
     @Override
+    @Caching(cacheable = @Cacheable(value = "notification"))
     public void sendNotification(NotificationRequest notificationRequest) {
         Notification notification = notificationRepository.save(notificationRequest.toNotification());
         messageSender.send(notification.getMessage());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PagedModel<NotificationResponse> getNotifications(Pageable pageable) {
         return new PagedModel<>(notificationRepository.findAll(pageable)
                 .map(NotificationResponse::fromNotification));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PagedModel<NotificationResponse> getNotificationsByTarget(String target, Pageable pageable) {
         return new PagedModel<>(notificationRepository.findAllByMessageTarget(target, pageable)
                 .map(NotificationResponse::fromNotification));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PagedModel<NotificationResponse> getNotificationsByType(Message.Type messageType, Pageable pageable) {
         return new PagedModel<>(notificationRepository.findAllByMessageType(messageType, pageable)
                 .map(NotificationResponse::fromNotification));
     }
 
     @Override
+    @Cacheable(value = "notification")
+    @Transactional(readOnly = true)
     public NotificationResponse getNotification(Long id) {
         return NotificationResponse.fromNotification(notificationRepository.findById(id)
                 .orElseThrow(NotificationNotFoundException::new));
