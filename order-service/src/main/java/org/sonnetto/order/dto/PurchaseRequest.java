@@ -10,10 +10,10 @@ import java.util.List;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PurchaseRequest implements Serializable {
-    private List<Long> priceIds;
+    private List<Long> productIds;
     private String currency;
 
     public Purchase toPurchase() {
-        return new Purchase(this.getPriceIds(), null, this.getCurrency(), null);
+        return new Purchase(this.getProductIds(), null, this.getCurrency(), null);
     }
 }

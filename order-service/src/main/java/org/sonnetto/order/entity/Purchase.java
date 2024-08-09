@@ -19,7 +19,7 @@ import java.util.List;
 public class Purchase implements Serializable {
     @ProductIdList
     @ElementCollection
-    private List<Long> priceIds;
+    private List<Long> productIds;
     @Min(0)
     private Float summary;
     @NotBlank

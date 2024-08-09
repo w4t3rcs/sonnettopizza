@@ -64,7 +64,7 @@ public class StripeFactoryImpl implements StripeFactory {
                 .setSuccessUrl(stripeConfigProperties.getClient().getSuccessUrl())
                 .setCancelUrl(stripeConfigProperties.getClient().getFailureUrl());
         Purchase purchase = order.getPurchase();
-        Flux.fromIterable(purchase.getPriceIds())
+        Flux.fromIterable(purchase.getProductIds())
                 .flatMap((id) -> webClient.get()
                         .uri(PRODUCT_URI, id, purchase.getCurrency())
                         .retrieve()
