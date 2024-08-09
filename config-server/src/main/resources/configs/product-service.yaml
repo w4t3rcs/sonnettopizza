@@ -30,7 +30,6 @@ management:
         include: '*'
   health:
     show_details: always
-    circuitbreakers: enabled
 eureka:
   client:
     service-url:

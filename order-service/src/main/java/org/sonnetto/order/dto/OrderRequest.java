@@ -19,6 +19,6 @@ public class OrderRequest implements Serializable {
 
     @Valid
     public Order toOrder() {
-        return new Order(null, address, status, purchase.toPurchase(), userId);
+        return new Order(null, this.getAddress(), this.getStatus(), this.getPurchase().toPurchase(), this.getUserId());
     }
 }
