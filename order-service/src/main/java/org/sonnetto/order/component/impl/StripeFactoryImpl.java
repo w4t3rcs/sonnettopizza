@@ -10,7 +10,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.sonnetto.order.component.StripeFactory;
 import org.sonnetto.order.config.StripeConfigProperties;
-import org.sonnetto.order.dto.PriceResponse;
+import org.sonnetto.order.dto.ProductResponse;
 import org.sonnetto.order.dto.UserResponse;
 import org.sonnetto.order.entity.Address;
 import org.sonnetto.order.entity.Order;
@@ -25,7 +25,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class StripeFactoryImpl implements StripeFactory {
     private static final String USER_URI = "http://user-service:8081/api/v1.0/users/{id}";
-    private static final String PRICE_URI = "http://price-service:8084/api/v1.0/prices/{id}?convert_to={code}";
+    private static final String PRODUCT_URI = "http://product-service:8083/api/v1.0/products/{id}?currency={currency}";
     private final StripeConfigProperties stripeConfigProperties;
     private final WebClient webClient;
 
@@ -66,16 +66,16 @@ public class StripeFactoryImpl implements StripeFactory {
         Purchase purchase = order.getPurchase();
         Flux.fromIterable(purchase.getPriceIds())
                 .flatMap((id) -> webClient.get()
-                        .uri(PRICE_URI, id, purchase.getCode())
+                        .uri(PRODUCT_URI, id, purchase.getCurrency())
                         .retrieve()
-                        .bodyToMono(PriceResponse.class)
-                        .map(priceResponse -> SessionCreateParams.LineItem.PriceData.builder()
+                        .bodyToMono(ProductResponse.class)
+                        .map(productResponse -> SessionCreateParams.LineItem.PriceData.builder()
                                 .setProductData(SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                        .putMetadata("app_id", priceResponse.getId().toString())
-                                        .setName(priceResponse.getDishId().toString())
+                                        .putMetadata("app_id", productResponse.getId().toString())
+                                        .setName(productResponse.getName())
                                         .build())
-                                .setCurrency(purchase.getCode())
-                                .setUnitAmount((long) (priceResponse.getValue() * 100))
+                                .setCurrency(purchase.getCurrency())
+                                .setUnitAmount((long) (productResponse.getPrice().getValue() * 100))
                                 .build()))
                 .map(priceData -> SessionCreateParams.LineItem.builder()
                         .setQuantity(1L)

@@ -7,7 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.sonnetto.order.validation.PriceIdList;
+import org.hibernate.validator.constraints.Length;
+import org.sonnetto.order.validation.ProductIdList;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,13 +17,14 @@ import java.util.List;
 @AllArgsConstructor @NoArgsConstructor
 @Embeddable
 public class Purchase implements Serializable {
-    @PriceIdList
+    @ProductIdList
     @ElementCollection
     private List<Long> priceIds;
     @Min(0)
     private Float summary;
     @NotBlank
-    private String code;
+    @Length(min = 3, max = 3)
+    private String currency;
     @NotBlank
     private String paymentUrl;
 }

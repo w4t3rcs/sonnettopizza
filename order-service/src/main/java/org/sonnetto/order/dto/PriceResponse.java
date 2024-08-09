@@ -6,8 +6,6 @@ import java.io.Serializable;
 
 @Data
 public class PriceResponse implements Serializable {
-    private Long id;
     private Float value;
-    private String code;
-    private Long dishId;
+    private String currency;
 }

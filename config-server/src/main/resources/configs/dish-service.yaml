@@ -4,8 +4,8 @@ spring:
   datasource:
     username: user
     password: password
-    url: jdbc:mysql://dish-service-mysql:3306
-    name: dishdb
+    url: jdbc:mysql://product-service-mysql:3306
+    name: productdb
     hikari:
       initialization-fail-timeout: 0
   jpa:
@@ -20,7 +20,7 @@ spring:
       time-to-live: 2m
   data:
     redis:
-      host: dish-service-redis
+      host: product-service-redis
       password: password
       port: 6379
 management:

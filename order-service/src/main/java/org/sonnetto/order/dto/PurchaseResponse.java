@@ -15,9 +15,9 @@ import java.util.List;
 public class PurchaseResponse implements Serializable {
     private List<Long> priceIds;
     private Float summary;
-    private String code;
+    private String currency;
 
     public static PurchaseResponse fromPurchase(Purchase purchase) {
-        return new PurchaseResponse(purchase.getPriceIds(), purchase.getSummary(), purchase.getCode());
+        return new PurchaseResponse(purchase.getPriceIds(), purchase.getSummary(), purchase.getCurrency());
     }
 }

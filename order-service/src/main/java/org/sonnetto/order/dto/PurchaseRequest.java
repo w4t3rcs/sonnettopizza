@@ -11,9 +11,9 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PurchaseRequest implements Serializable {
     private List<Long> priceIds;
-    private String code;
+    private String currency;
 
     public Purchase toPurchase() {
-        return new Purchase(this.getPriceIds(), null, this.getCode(), null);
+        return new Purchase(this.getPriceIds(), null, this.getCurrency(), null);
     }
 }

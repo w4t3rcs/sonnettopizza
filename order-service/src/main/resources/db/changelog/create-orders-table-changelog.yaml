@@ -45,7 +45,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: purchase_price_ids
+                  name: purchase_product_ids
                   type: varchar(256)
                   constraints:
                     nullable: false
@@ -55,7 +55,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: purchase_code
+                  name: purchase_currency
                   type: varchar(3)
                   defaultValue: USD
                   constraints:

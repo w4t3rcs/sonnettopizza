@@ -1,3 +1,0 @@
-databaseChangeLog:
-  - include:  
-      file: db/changelog/create-prices-table-changelog.yaml
