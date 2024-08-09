@@ -1,7 +1,6 @@
 package org.sonnetto.product.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.sonnetto.product.dto.ProductRequest;
 import org.sonnetto.product.dto.ProductResponse;
 import org.sonnetto.product.service.ProductService;
@@ -10,10 +9,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedModel;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/v1.0/products")
@@ -21,10 +19,9 @@ import java.util.concurrent.CompletableFuture;
 public class ProductController {
     private final ProductService productService;
 
-    @SneakyThrows
     @PostMapping
-    public CompletableFuture<ProductResponse> postProduct(@RequestBody ProductRequest productRequest) {
-        return productService.createProduct(productRequest);
+    public ResponseEntity<ProductResponse> postProduct(@RequestBody ProductRequest productRequest) {
+        return new ResponseEntity<>(productService.createProduct(productRequest), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -43,10 +40,9 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductWithConvertedPrice(id, currency));
     }
 
-    @SneakyThrows
     @PutMapping("/{id}")
-    public CompletableFuture<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
-        return productService.updateProduct(id, productRequest);
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
+        return ResponseEntity.ok(productService.updateProduct(id, productRequest));
     }
 
     @DeleteMapping("/{id}")
