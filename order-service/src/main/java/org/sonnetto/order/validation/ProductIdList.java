@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ProductIdList {
-    String message() default "Invalid price id list";
+    String message() default "Invalid product id list";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
