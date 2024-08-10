@@ -307,17 +307,6 @@ services:
       - zipkin
       - eureka-server
       - config-server
-      - broker
-      - user-service-mysql
-      - ingredient-service-mysql
-      - product-service-mysql
-      - order-service-mysql
-      - notification-service-mysql
-      - user-service-redis
-      - ingredient-service-redis
-      - product-service-redis
-      - order-service-redis
-      - notification-service-redis
       - user-service
       - ingredient-service
       - product-service
@@ -325,6 +314,40 @@ services:
       - notification-service
 #      - keycloak-mysql
 #      - keycloak
+    networks:
+      - sonnetto
+  prometheus:
+    container_name: sonnetto-prometheus
+    image: prom/prometheus:v2.54.0
+    ports:
+      - '9090:9090'
+    depends_on:
+      - eureka-server
+      - config-server
+      - user-service
+      - ingredient-service
+      - product-service
+      - order-service
+      - notification-service
+      - api-gateway
+    volumes:
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
+    networks:
+      - sonnetto
+  grafana:
+    container_name: sonnetto-grafana
+    image: grafana/grafana:9.1.7
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+    ports:
+      - '3000:300'
+    depends_on:
+      - prometheus
+    links:
+      - prometheus:prometheus
+    volumes:
+      - ./grafana:/var/lib/grafana
     networks:
       - sonnetto
 volumes:
