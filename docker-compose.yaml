@@ -1,4 +1,11 @@
 services:
+  zipkin:
+    container_name: sonnetto-zipkin
+    image: openzipkin/zipkin:3.4.1
+    environment:
+      - STORAGE_TYPE=mem
+    ports:
+      - '9411:9411'
   eureka-server:
     container_name: sonnetto-eureka-server
     image: w4t3rcs/sonnetto-eureka-server:latest

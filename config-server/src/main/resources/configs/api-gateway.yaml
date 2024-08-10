@@ -40,6 +40,16 @@ spring:
             uri: http://eureka-server:8761
             predicates:
               - Path=/eureka/**
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    show_details: always
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411
 eureka:
   client:
     service-url:

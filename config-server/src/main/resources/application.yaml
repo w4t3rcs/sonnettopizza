@@ -10,6 +10,10 @@ spring:
           uri: https://github.com/w4t3rcs/sonnettopizza
           search-paths: config-server/src/main/resources/configs
           clone-on-start: true
+management:
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411
 eureka:
   client:
     service-url:
