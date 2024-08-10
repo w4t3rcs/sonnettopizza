@@ -344,10 +344,8 @@ services:
       - '3000:3000'
     depends_on:
       - prometheus
-    links:
-      - prometheus:prometheus
     volumes:
-      - ./grafana:/var/lib/grafana
+      - ./grafana:/etc/grafana/provisioning/datasources
     networks:
       - sonnetto
 volumes:
