@@ -331,7 +331,7 @@ services:
       - notification-service
       - api-gateway
     volumes:
-      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - sonnetto
   grafana:
@@ -341,7 +341,7 @@ services:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
     ports:
-      - '3000:300'
+      - '3000:3000'
     depends_on:
       - prometheus
     links:
