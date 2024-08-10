@@ -41,8 +41,9 @@ management:
     web:
       exposure:
         include: '*'
-  health:
-    show_details: always
+  endpoint:
+    health:
+      show-details: always
   zipkin:
     tracing:
       endpoint: http://zipkin:9411

@@ -16,6 +16,13 @@ eureka:
     user: eureka
     password: eureka
 management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
   zipkin:
     tracing:
       endpoint: http://zipkin:9411

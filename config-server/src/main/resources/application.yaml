@@ -11,6 +11,13 @@ spring:
           search-paths: config-server/src/main/resources/configs
           clone-on-start: true
 management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
   zipkin:
     tracing:
       endpoint: http://zipkin:9411
