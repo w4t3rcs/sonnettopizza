@@ -1,7 +1,7 @@
 services:
   zipkin:
     container_name: sonnetto-zipkin
-    image: openzipkin/zipkin:3.4.1
+    image: openzipkin/zipkin:2.27.1
     environment:
       - STORAGE_TYPE=mem
     ports:
