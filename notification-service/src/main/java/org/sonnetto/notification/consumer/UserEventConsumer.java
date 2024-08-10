@@ -1,7 +1,6 @@
 package org.sonnetto.notification.consumer;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.sonnetto.notification.dto.NotificationRequest;
 import org.sonnetto.notification.dto.UserEvent;
 import org.sonnetto.notification.entity.Message;
@@ -9,7 +8,6 @@ import org.sonnetto.notification.service.NotificationService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserEventConsumer {
