@@ -22,9 +22,7 @@ public class PaymentServiceImpl implements PaymentService {
     public void processPayment(Order order) {
         try {
             Customer customer = stripeFactory.createCustomer(order);
-            log.info("Customer created: {}", customer.getId());
             Session session = stripeFactory.createSession(order, customer);
-            log.info("Session created: {}", session.getId());
             Purchase purchase = order.getPurchase();
             purchase.setPaymentUrl(session.getUrl());
             purchase.setSummary(session.getAmountTotal().floatValue());

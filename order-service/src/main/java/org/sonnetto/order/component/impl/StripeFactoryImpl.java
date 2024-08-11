@@ -6,7 +6,6 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.sonnetto.order.component.StripeFactory;
 import org.sonnetto.order.config.StripeConfigProperties;
 import org.sonnetto.order.dto.ProductResponse;
@@ -20,7 +19,6 @@ import reactor.core.publisher.Flux;
 
 import java.util.Objects;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class StripeFactoryImpl implements StripeFactory {
@@ -65,7 +63,7 @@ public class StripeFactoryImpl implements StripeFactory {
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setCustomer(customer.getId())
-                .setSuccessUrl(stripeConfigProperties.getClient().getSuccessUrl() + order.getId())
+                .setSuccessUrl(stripeConfigProperties.getClient().getSuccessUrl() + "/" + order.getId())
                 .setCancelUrl(stripeConfigProperties.getClient().getFailureUrl())
                 .addLineItem(SessionCreateParams.LineItem.builder()
                         .setQuantity(1L)
