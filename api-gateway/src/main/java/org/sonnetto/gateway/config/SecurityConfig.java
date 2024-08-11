@@ -19,10 +19,8 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity) {
         return httpSecurity.csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchangeSpec ->
-                        exchangeSpec.pathMatchers(unsecuredPaths)
-                                .permitAll()
-                                .anyExchange()
-                                .authenticated())
+                        exchangeSpec.pathMatchers(unsecuredPaths).permitAll()
+                                .anyExchange().authenticated())
                 .oauth2ResourceServer(serverSpec -> serverSpec.jwt(Customizer.withDefaults()))
                 .build();
     }
