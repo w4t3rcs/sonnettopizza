@@ -1,12 +1,10 @@
 package org.sonnetto.order.component.impl;
 
-import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sonnetto.order.component.StripeFactory;
@@ -31,11 +29,6 @@ public class StripeFactoryImpl implements StripeFactory {
     private final StripeConfigProperties stripeConfigProperties;
     private final WebClient webClient;
 
-    @PostConstruct
-    public void init() {
-        Stripe.apiKey = stripeConfigProperties.getApiKey();
-    }
-
     @Override
     public Customer createCustomer(Order order) throws StripeException {
         UserResponse userResponse = Objects.requireNonNull(webClient.get()
@@ -43,7 +36,6 @@ public class StripeFactoryImpl implements StripeFactory {
                 .retrieve()
                 .bodyToMono(UserResponse.class)
                 .block());
-        log.info(userResponse.toString());
         Address address = order.getAddress();
         CustomerCreateParams customerCreateParams = CustomerCreateParams.builder()
                 .setAddress(CustomerCreateParams.Address.builder()
@@ -56,37 +48,35 @@ public class StripeFactoryImpl implements StripeFactory {
                 .setName(userResponse.getName())
                 .setEmail(userResponse.getEmail())
                 .build();
-        log.info(customerCreateParams.toString());
         return Customer.create(customerCreateParams);
     }
 
     @Override
     public Session createSession(Order order, Customer customer) throws StripeException {
-        SessionCreateParams.Builder sessionBuilder = SessionCreateParams.builder()
-                .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setCustomer(customer.getId())
-                .setSuccessUrl(stripeConfigProperties.getClient().getSuccessUrl())
-                .setCancelUrl(stripeConfigProperties.getClient().getFailureUrl());
         Purchase purchase = order.getPurchase();
-        Flux.fromIterable(purchase.getProductIds())
+        Float totalAmount = Flux.fromIterable(purchase.getProductIds())
                 .flatMap((id) -> webClient.get()
                         .uri(PRODUCT_URI, id, purchase.getCurrency())
                         .retrieve()
-                        .bodyToMono(ProductResponse.class)
-                        .map(productResponse -> SessionCreateParams.LineItem.PriceData.builder()
+                        .bodyToMono(ProductResponse.class))
+                .reduce(0.0f, (total, productResponse) -> total + productResponse.getPrice().getValue())
+                .block();
+        SessionCreateParams.Builder sessionBuilder = SessionCreateParams.builder()
+                .setMode(SessionCreateParams.Mode.PAYMENT)
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                .setCustomer(customer.getId())
+                .setSuccessUrl(stripeConfigProperties.getClient().getSuccessUrl() + order.getId())
+                .setCancelUrl(stripeConfigProperties.getClient().getFailureUrl())
+                .addLineItem(SessionCreateParams.LineItem.builder()
+                        .setQuantity(1L)
+                        .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
                                 .setProductData(SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                        .putMetadata("app_id", productResponse.getId().toString())
-                                        .setName(productResponse.getName())
+                                        .setName("SonnettoPizza")
                                         .build())
                                 .setCurrency(purchase.getCurrency())
-                                .setUnitAmount((long) (productResponse.getPrice().getValue() * 100))
-                                .build()))
-                .map(priceData -> SessionCreateParams.LineItem.builder()
-                        .setQuantity(1L)
-                        .setPriceData(priceData)
-                        .build())
-                .subscribe(sessionBuilder::addLineItem);
-        log.info(sessionBuilder.toString());
+                                .setUnitAmount((long) (Objects.requireNonNull(totalAmount) * 100))
+                                .build())
+                        .build());
         return Session.create(sessionBuilder.build());
     }
 }

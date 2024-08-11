@@ -22,7 +22,7 @@ public class OrderEvent implements Serializable {
     public static OrderEvent fromOrder(Order order) {
         WebClient webClient = ApplicationContextContainer.getApplicationContext().getBean(WebClient.class);
         UserResponse userResponse = Objects.requireNonNull(webClient.get()
-                .uri(USER_URI)
+                .uri(USER_URI, order.getId())
                 .retrieve()
                 .bodyToMono(UserResponse.class)
                 .block());

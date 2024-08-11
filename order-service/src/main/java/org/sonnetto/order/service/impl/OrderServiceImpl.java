@@ -118,6 +118,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderResponse updateOrderByStatus(Long id, Status status) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(OrderNotFoundException::new);
+        order.setStatus(status);
+        Order updatedOrder = orderRepository.save(order);
+        orderProducer.sendOrder("order.updated", updatedOrder);
+        return OrderResponse.fromOrder(updatedOrder);
+    }
+
+    @Override
     @Caching(evict = @CacheEvict("orderCache"))
     @Transactional
     public Long deleteOrder(Long id) {
