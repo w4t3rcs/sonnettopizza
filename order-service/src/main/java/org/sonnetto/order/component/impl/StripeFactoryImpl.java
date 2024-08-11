@@ -8,6 +8,7 @@ import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sonnetto.order.component.StripeFactory;
 import org.sonnetto.order.config.StripeConfigProperties;
 import org.sonnetto.order.dto.ProductResponse;
@@ -21,6 +22,7 @@ import reactor.core.publisher.Flux;
 
 import java.util.Objects;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class StripeFactoryImpl implements StripeFactory {
@@ -41,6 +43,7 @@ public class StripeFactoryImpl implements StripeFactory {
                 .retrieve()
                 .bodyToMono(UserResponse.class)
                 .block());
+        log.info(userResponse.toString());
         Address address = order.getAddress();
         CustomerCreateParams customerCreateParams = CustomerCreateParams.builder()
                 .setAddress(CustomerCreateParams.Address.builder()
@@ -53,6 +56,7 @@ public class StripeFactoryImpl implements StripeFactory {
                 .setName(userResponse.getName())
                 .setEmail(userResponse.getEmail())
                 .build();
+        log.info(customerCreateParams.toString());
         return Customer.create(customerCreateParams);
     }
 
@@ -82,6 +86,7 @@ public class StripeFactoryImpl implements StripeFactory {
                         .setPriceData(priceData)
                         .build())
                 .subscribe(sessionBuilder::addLineItem);
+        log.info(sessionBuilder.toString());
         return Session.create(sessionBuilder.build());
     }
 }

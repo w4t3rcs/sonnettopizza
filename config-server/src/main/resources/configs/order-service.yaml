@@ -55,7 +55,7 @@ eureka:
     service-url:
       defaultZone: http://eureka-server:8761/eureka/
 stripe:
-  secret-key: sk_test_51Pj5rhP9Ug6EI0VqWjPjfT2spcyTNTF0F806ZMEumwrl5WdFRhwZk06MrL6TKGINfg9FZDhPXBLfJr4GCctKMFBl00pt9VPh1C
+  api-key: sk_test_51Pj5rhP9Ug6EI0VqWjPjfT2spcyTNTF0F806ZMEumwrl5WdFRhwZk06MrL6TKGINfg9FZDhPXBLfJr4GCctKMFBl00pt9VPh1C
   client:
     success-url: http://frontend:3000/payment/success
     failure-url: http://frontend:3000/payment/failure
