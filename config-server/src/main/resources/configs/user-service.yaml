@@ -36,6 +36,12 @@ spring:
         json:
           type:
             mapping: user:org.sonnetto.user.dto.UserEvent
+springdoc:
+  show-actuator: true
+  api-docs:
+    path: /api/v1.0/docs
+  swagger-ui:
+    path: /swagger-ui.html
 management:
   endpoints:
     web:

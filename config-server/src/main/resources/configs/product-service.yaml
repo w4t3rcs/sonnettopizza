@@ -23,6 +23,12 @@ spring:
       host: product-service-redis
       password: password
       port: 6379
+springdoc:
+  show-actuator: true
+  api-docs:
+    path: /api/v1.0/docs
+  swagger-ui:
+    path: /swagger-ui.html
 management:
   endpoints:
     web:

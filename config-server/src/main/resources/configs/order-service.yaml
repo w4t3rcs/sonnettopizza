@@ -36,6 +36,12 @@ spring:
         json:
           type:
             mapping: order:org.sonnetto.order.dto.OrderEvent
+springdoc:
+  show-actuator: true
+  api-docs:
+    path: /api/v1.0/docs
+  swagger-ui:
+    path: /swagger-ui.html
 management:
   endpoints:
     web:

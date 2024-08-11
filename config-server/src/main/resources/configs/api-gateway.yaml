@@ -14,22 +14,52 @@ spring:
             uri: lb://user-service
             predicates:
               - Path=/api/v1.0/users
+          - id: user-service-docs
+            uri: lb://user-service
+            predicates:
+              - Path=/api/v1.0/docs
+            filters:
+              - SetPath=/api/v1.0/docs/user-service
           - id: ingredient-service
             uri: lb://ingredient-service
             predicates:
               - Path=/api/v1.0/ingredients
+          - id: ingredient-service-docs
+            uri: lb://ingredient-service
+            predicates:
+              - Path=/api/v1.0/docs
+            filters:
+              - SetPath=/api/v1.0/docs/ingredient-service
           - id: product-service
             uri: lb://product-service
             predicates:
               - Path=/api/v1.0/products
+          - id: product-service-docs
+            uri: lb://product-service
+            predicates:
+              - Path=/api/v1.0/docs
+            filters:
+              - SetPath=/api/v1.0/docs/product-service
           - id: order-service
             uri: lb://order-service
             predicates:
               - Path=/api/v1.0/orders
+          - id: order-service-docs
+            uri: lb://order-service
+            predicates:
+              - Path=/api/v1.0/docs
+            filters:
+              - SetPath=/api/v1.0/docs/order-service
           - id: notification-service
             uri: lb://notification-service
             predicates:
               - Path=/api/v1.0/notifications
+          - id: notification-service-docs
+            uri: lb://notification-service
+            predicates:
+              - Path=/api/v1.0/docs
+            filters:
+              - SetPath=/api/v1.0/docs/notification-service
           - id: eureka-server
             uri: http://eureka-server:8761
             predicates:
@@ -40,6 +70,28 @@ spring:
             uri: http://eureka-server:8761
             predicates:
               - Path=/eureka/**
+springdoc:
+  show-actuator: true
+  api-docs:
+    path: /api/v1.0/docs
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: user-service
+        display-name: User Service
+        url: /api/v1.0/docs/user-service
+      - name: ingredient-service
+        display-name: Ingredient Service
+        url: /api/v1.0/docs/ingredient-service
+      - name: product-service
+        display-name: Product Service
+        url: /api/v1.0/docs/product-service
+      - name: order-service
+        display-name: Order Service
+        url: /api/v1.0/docs/order-service
+      - name: notification-service
+        display-name: Notification Service
+        url: /api/v1.0/docs/notification-service
 management:
   endpoints:
     web:
