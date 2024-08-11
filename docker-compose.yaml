@@ -312,8 +312,8 @@ services:
       - product-service
       - order-service
       - notification-service
-#      - keycloak-mysql
-#      - keycloak
+      - keycloak-mysql
+      - keycloak
     networks:
       - sonnetto
   prometheus:
