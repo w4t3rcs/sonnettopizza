@@ -65,3 +65,7 @@ stripe:
   client:
     success-url: http://frontend:3000/payment/success
     failure-url: http://frontend:3000/payment/failure
+sonnetto:
+  urls:
+    user-service: http://user-service/8081/api/v1.0/users
+    product-service: http://product-service/8083/api/v1.0/products

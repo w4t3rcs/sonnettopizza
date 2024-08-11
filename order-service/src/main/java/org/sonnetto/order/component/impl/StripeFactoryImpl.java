@@ -6,34 +6,31 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 import lombok.RequiredArgsConstructor;
+import org.sonnetto.order.client.ProductClient;
+import org.sonnetto.order.client.UserClient;
 import org.sonnetto.order.component.StripeFactory;
 import org.sonnetto.order.config.StripeConfigProperties;
-import org.sonnetto.order.dto.ProductResponse;
 import org.sonnetto.order.dto.UserResponse;
 import org.sonnetto.order.entity.Address;
 import org.sonnetto.order.entity.Order;
 import org.sonnetto.order.entity.Purchase;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
 public class StripeFactoryImpl implements StripeFactory {
-    private static final String USER_URI = "http://user-service:8081/api/v1.0/users/{id}";
-    private static final String PRODUCT_URI = "http://product-service:8083/api/v1.0/products/{id}?currency={currency}";
     private final StripeConfigProperties stripeConfigProperties;
-    private final WebClient webClient;
+    private final UserClient userClient;
+    private final ProductClient productClient;
 
     @Override
     public Customer createCustomer(Order order) throws StripeException {
-        UserResponse userResponse = Objects.requireNonNull(webClient.get()
-                .uri(USER_URI, order.getUserId())
-                .retrieve()
-                .bodyToMono(UserResponse.class)
-                .block());
+        UserResponse user = userClient.getUser(order.getUserId())
+                .getBody();
         Address address = order.getAddress();
         CustomerCreateParams customerCreateParams = CustomerCreateParams.builder()
                 .setAddress(CustomerCreateParams.Address.builder()
@@ -43,8 +40,8 @@ public class StripeFactoryImpl implements StripeFactory {
                         .setLine2(address.getHouseNumber())
                         .setPostalCode(address.getPostalCode())
                         .build())
-                .setName(userResponse.getName())
-                .setEmail(userResponse.getEmail())
+                .setName(user.getName())
+                .setEmail(user.getEmail())
                 .build();
         return Customer.create(customerCreateParams);
     }
@@ -53,10 +50,9 @@ public class StripeFactoryImpl implements StripeFactory {
     public Session createSession(Order order, Customer customer) throws StripeException {
         Purchase purchase = order.getPurchase();
         Float totalAmount = Flux.fromIterable(purchase.getProductIds())
-                .flatMap((id) -> webClient.get()
-                        .uri(PRODUCT_URI, id, purchase.getCurrency())
-                        .retrieve()
-                        .bodyToMono(ProductResponse.class))
+                .publishOn(Schedulers.boundedElastic())
+                .mapNotNull((id) -> productClient.getProduct(id, purchase.getCurrency())
+                        .getBody())
                 .reduce(0.0f, (total, productResponse) -> total + productResponse.getPrice().getValue())
                 .block();
         SessionCreateParams.Builder sessionBuilder = SessionCreateParams.builder()

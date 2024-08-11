@@ -2,31 +2,29 @@ package org.sonnetto.product.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.sonnetto.product.client.IngredientClient;
+import org.sonnetto.product.config.ApplicationContextContainer;
+import org.springframework.http.HttpStatusCode;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
 
 public class IngredientIdListValidator implements ConstraintValidator<IngredientIdList, List<Long>> {
-    private static final String INGREDIENT_URI = "http://ingredient-service:8082/api/v1.0/ingredients/{id}";
-    private WebClient webClient;
+    private IngredientClient ingredientClient;
 
     @Override
     public void initialize(IngredientIdList constraintAnnotation) {
-        this.webClient = WebClient.create();
+        this.ingredientClient = ApplicationContextContainer.getApplicationContext().getBean(IngredientClient.class);
     }
 
     @Override
     public boolean isValid(List<Long> ids, ConstraintValidatorContext constraintValidatorContext) {
         if (ids == null || ids.isEmpty()) return true;
         return Boolean.TRUE.equals(Flux.fromIterable(ids)
-                .flatMap(id -> webClient.head()
-                        .uri(INGREDIENT_URI, id)
-                        .retrieve()
-                        .toBodilessEntity()
-                        .map(response -> response.getStatusCode().is2xxSuccessful())
-                        .onErrorReturn(false))
-                .all(Boolean::booleanValue)
+                .publishOn(Schedulers.boundedElastic())
+                .map(id -> ingredientClient.getIngredientHead(id).getStatusCode())
+                .all(HttpStatusCode::is2xxSuccessful)
                 .block());
     }
 }
