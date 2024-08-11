@@ -6,9 +6,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import java.io.Serializable;
+
 @Data
 @Embeddable
-public class Price {
+public class Price implements Serializable {
     @Min(0)
     private Float value;
     @NotBlank
