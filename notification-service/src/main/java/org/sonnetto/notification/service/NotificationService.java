@@ -2,9 +2,10 @@ package org.sonnetto.notification.service;
 
 import org.sonnetto.notification.dto.NotificationRequest;
 import org.sonnetto.notification.dto.NotificationResponse;
-import org.sonnetto.notification.entity.Message;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
+
+import java.time.LocalDateTime;
 
 public interface NotificationService {
     void sendNotification(NotificationRequest notificationRequest);
@@ -13,7 +14,9 @@ public interface NotificationService {
 
     PagedModel<NotificationResponse> getNotificationsByTarget(String target, Pageable pageable);
 
-    PagedModel<NotificationResponse> getNotificationsByType(Message.Type messageType, Pageable pageable);
+    PagedModel<NotificationResponse> getNotificationsByBody(String body, Pageable pageable);
+
+    PagedModel<NotificationResponse> getNotificationsBySentDate(LocalDateTime sentDate, Pageable pageable);
 
     NotificationResponse getNotification(Long id);
 }

@@ -1,17 +1,10 @@
 server:
   port: 8085
 spring:
-  datasource:
-    username: user
-    password: password
-    url: jdbc:mysql://notification-service-mysql:3306
-    name: notificationdb
-    hikari:
-      initialization-fail-timeout: 0
-  jpa:
-    hibernate:
-      ddl-auto: create
-    show-sql: true
+  elasticsearch:
+    username: elastic
+    password: elastic
+    uris: http://notification-service-elasticsearch:9200
   cache:
     type: redis
     redis:

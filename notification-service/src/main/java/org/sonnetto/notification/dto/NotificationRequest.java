@@ -15,10 +15,9 @@ public class NotificationRequest implements Serializable {
     private String subject;
     private String target;
     private String body;
-    private Message.Type messageType;
 
     @Valid
     public Notification toNotification() {
-        return new Notification(null, new Message(this.getTarget(), this.getSubject(), this.getBody(), this.getMessageType()), LocalDateTime.now());
+        return new Notification(null, new Message(this.getTarget(), this.getSubject(), this.getBody()), LocalDateTime.now());
     }
 }

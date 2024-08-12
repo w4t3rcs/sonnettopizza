@@ -217,16 +217,21 @@ services:
       - order-service-redis
     networks:
       - sonnetto
-  notification-service-mysql:
-    container_name: sonnetto-notification-service-mysql
-    image: mysql:9
+  notification-service-elasticsearch:
+    container_name: sonnetto-notification-service-elasticsearch
+    image: elasticsearch:8.8.0
     environment:
-      MYSQL_DATABASE: ${MYSQL_NOTIFICATION_SERVICE_DB}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      discovery.type: single-node
+      xpack.security.enabled: false
+      path.data: /usr/share/elasticsearch/data
+      bootstrap.memory_lock: true
+      ES_JAVA_OPTS: = -Xms512m -Xmx512m
+    ports:
+      - '9200:9200'
+      - '9300:9300'
     volumes:
-      - notification-service-db:/var/lib/mysql
+      - notification-service-db:/usr/share/elasticsearch/data
     networks:
       - sonnetto
   notification-service-redis:
@@ -254,7 +259,7 @@ services:
       - eureka-server
       - config-server
       - broker
-      - notification-service-mysql
+      - notification-service-elasticsearch
       - notification-service-redis
     networks:
       - sonnetto

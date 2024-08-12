@@ -3,7 +3,6 @@ package org.sonnetto.notification.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.sonnetto.notification.dto.NotificationRequest;
 import org.sonnetto.notification.dto.NotificationResponse;
-import org.sonnetto.notification.entity.Message;
 import org.sonnetto.notification.entity.Notification;
 import org.sonnetto.notification.exception.NotificationNotFoundException;
 import org.sonnetto.notification.repository.NotificationRepository;
@@ -15,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -45,8 +46,15 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public PagedModel<NotificationResponse> getNotificationsByType(Message.Type messageType, Pageable pageable) {
-        return new PagedModel<>(notificationRepository.findAllByMessageType(messageType, pageable)
+    public PagedModel<NotificationResponse> getNotificationsByBody(String body, Pageable pageable) {
+        return new PagedModel<>(notificationRepository.findAllByMessageBody(body, pageable)
+                .map(NotificationResponse::fromNotification));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PagedModel<NotificationResponse> getNotificationsBySentDate(LocalDateTime sentDate, Pageable pageable) {
+        return new PagedModel<>(notificationRepository.findAllBySentDate(sentDate, pageable)
                 .map(NotificationResponse::fromNotification));
     }
 

@@ -2,7 +2,6 @@ package org.sonnetto.notification.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.sonnetto.notification.dto.NotificationResponse;
-import org.sonnetto.notification.entity.Message;
 import org.sonnetto.notification.service.NotificationService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -11,6 +10,8 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1.0/notifications")
@@ -29,10 +30,16 @@ public class NotificationController {
         return notificationService.getNotificationsByTarget(target, pageable);
     }
 
-    @GetMapping(params = "message_type")
-    public PagedModel<NotificationResponse> getNotificationsByTarget(@RequestParam Message.Type messageType,
+    @GetMapping(params = "body")
+    public PagedModel<NotificationResponse> getNotificationsByBody(@RequestParam String body,
                                                                      @SortDefault(sort = "id", direction = Sort.Direction.ASC) @PageableDefault(size = 25) Pageable pageable) {
-        return notificationService.getNotificationsByType(messageType, pageable);
+        return notificationService.getNotificationsByBody(body, pageable);
+    }
+
+    @GetMapping(params = "sent_date")
+    public PagedModel<NotificationResponse> getNotificationsBySentDate(@RequestParam LocalDateTime sentDate,
+                                                                   @SortDefault(sort = "id", direction = Sort.Direction.ASC) @PageableDefault(size = 25) Pageable pageable) {
+        return notificationService.getNotificationsBySentDate(sentDate, pageable);
     }
 
     @GetMapping("/{id}")

@@ -3,7 +3,6 @@ package org.sonnetto.notification.consumer;
 import lombok.RequiredArgsConstructor;
 import org.sonnetto.notification.dto.NotificationRequest;
 import org.sonnetto.notification.dto.UserEvent;
-import org.sonnetto.notification.entity.Message;
 import org.sonnetto.notification.service.NotificationService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ public class UserEventConsumer {
                 .target(userEvent.getEmail())
                 .subject(subject)
                 .body(formattedBody)
-                .messageType(Message.Type.USER_CREATED)
                 .build();
         notificationService.sendNotification(notificationRequest);
     }
@@ -36,7 +34,6 @@ public class UserEventConsumer {
                 .target(userEvent.getEmail())
                 .subject(subject)
                 .body(formattedBody)
-                .messageType(Message.Type.USER_UPDATED)
                 .build();
         notificationService.sendNotification(notificationRequest);
     }
