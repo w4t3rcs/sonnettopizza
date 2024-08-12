@@ -219,7 +219,7 @@ services:
       - sonnetto
   notification-service-elasticsearch:
     container_name: sonnetto-notification-service-elasticsearch
-    image: elasticsearch:8.8.0
+    image: elasticsearch:8.15.0
     environment:
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
       discovery.type: single-node
@@ -248,10 +248,6 @@ services:
     pull_policy: always
     environment:
       SPRING_PROFILES_ACTIVE: default
-      SPRING_DATASOURCE_URL: ${MYSQL_NOTIFICATION_SERVICE_URL}/${MYSQL_NOTIFICATION_SERVICE_DB}
-      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
-      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
-      SPRING_JPA_HIBERNATE_DDL_AUTO: create
     ports:
       - '8085:8085'
     depends_on:
@@ -353,6 +349,59 @@ services:
       - ./grafana:/etc/grafana/provisioning/datasources
     networks:
       - sonnetto
+  logging-elasticsearch:
+    container_name: sonnetto-logging-elasticsearch
+    image: elasticsearch:8.15.0
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      discovery.type: single-node
+      xpack.security.enabled: false
+      path.data: /usr/share/elasticsearch/data
+      bootstrap.memory_lock: true
+      ES_JAVA_OPTS: = -Xms512m -Xmx512m
+    volumes:
+      - logging-db:/usr/share/elasticsearch/data
+    networks:
+      - sonnetto
+  logstash:
+    container_name: sonnetto-logstash
+    image: logstash:8.15.0
+    environment:
+      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      NODE_NAME: my-logstash
+      XPACK_MONITORING_ENABLED: true
+      PATH_CONFIG: /usr/share/logstash/conf
+      ES_JAVA_OPTS: = -Xms512m -Xmx512m
+    depends_on:
+      - logging-elasticsearch
+    links:
+      - logging-elasticsearch
+    volumes:
+      - ./logstash:/usr/share/logstash/conf
+      - ./logs:/tmp/logs
+    networks:
+      - sonnetto
+  kibana:
+    container_name: sonnetto-kibana
+    image: kibana:8.15.0
+    environment:
+      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      ELASTICSEARCH_HOSTS: ['http://notification-service-elasticsearch:9200', 'http://logging-elasticsearch:9200']
+      SERVER_NAME: kibana
+      XPACK_SECURITY_ENABLED: false
+      PATH_DATA: /usr/share/kibana/data
+    ports:
+      - '5601:5601'
+    depends_on:
+      - logging-elasticsearch
+    links:
+      - logging-elasticsearch
+    volumes:
+      - kibana-data:/usr/share/kibana/data
+    networks:
+      - sonnetto
 volumes:
   user-service-db:
   user-service-cache:
@@ -365,6 +414,8 @@ volumes:
   notification-service-db:
   notification-service-cache:
   keycloak_db:
+  logging-db:
+  kibana-data:
 
 networks:
   sonnetto:
