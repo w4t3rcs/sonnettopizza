@@ -388,7 +388,7 @@ services:
     environment:
       ELASTIC_USERNAME: ${ELASTIC_USERNAME}
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-      ELASTICSEARCH_HOSTS: ['http://notification-service-elasticsearch:9200', 'http://logging-elasticsearch:9200']
+      ELASTICSEARCH_HOSTS: '["http://notification-service-elasticsearch:9200", "http://logging-elasticsearch:9200"]'
       SERVER_NAME: kibana
       XPACK_SECURITY_ENABLED: false
       PATH_DATA: /usr/share/kibana/data
