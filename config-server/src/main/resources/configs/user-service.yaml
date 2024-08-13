@@ -12,6 +12,12 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: true
+    properties:
+      hibernate:
+        cache:
+          use_second_level: true
+          region:
+            factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
   cache:
     type: redis
     redis:
