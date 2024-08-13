@@ -6,4 +6,3 @@ gen
 grafana/!datasources.yml
 realms
 logs
-./*/logs

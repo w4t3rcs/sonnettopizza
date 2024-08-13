@@ -238,7 +238,7 @@ services:
       xpack.security.enabled: false
       path.data: /usr/share/elasticsearch/data
       bootstrap.memory_lock: true
-      ES_JAVA_OPTS: = -Xms512m -Xmx512m
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
     ports:
       - '9200:9200'
       - '9300:9300'
@@ -374,7 +374,7 @@ services:
       xpack.security.enabled: false
       path.data: /usr/share/elasticsearch/data
       bootstrap.memory_lock: true
-      ES_JAVA_OPTS: = -Xms512m -Xmx512m
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
     volumes:
       - logging-db:/usr/share/elasticsearch/data
     networks:
@@ -383,18 +383,21 @@ services:
     container_name: sonnetto-logstash
     image: logstash:8.15.0
     environment:
-      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-      NODE_NAME: my-logstash
-      XPACK_MONITORING_ENABLED: true
       PATH_CONFIG: /usr/share/logstash/conf
-      ES_JAVA_OPTS: = -Xms512m -Xmx512m
+      LS_JAVA_OPTS: -Xms512m -Xmx512m
+    ports:
+      - '5044:5044'
+      - '50000:50000/tcp'
+      - '50000:50000/udp'
+      - '9600:9600'
     depends_on:
       - logging-elasticsearch
     links:
       - logging-elasticsearch
     volumes:
-      - ./logstash:/usr/share/logstash/conf
+      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/pipeline:/usr/share/logstash/conf:ro
       - ./logs:/tmp/logs
     networks:
       - sonnetto
@@ -402,11 +405,6 @@ services:
     container_name: sonnetto-kibana
     image: kibana:8.15.0
     environment:
-      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-      ELASTICSEARCH_HOSTS: '["http://notification-service-elasticsearch:9200", "http://logging-elasticsearch:9200"]'
-      SERVER_NAME: kibana
-      XPACK_SECURITY_ENABLED: false
       PATH_DATA: /usr/share/kibana/data
     ports:
       - '5601:5601'
@@ -415,6 +413,7 @@ services:
     links:
       - logging-elasticsearch
     volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
       - kibana-data:/usr/share/kibana/data
     networks:
       - sonnetto

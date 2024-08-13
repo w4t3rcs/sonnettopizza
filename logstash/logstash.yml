@@ -1,0 +1,5 @@
+http.host: 0.0.0.0
+node.name: logstash-node
+path.config: ${PATH_CONFIG}
+xpack.monitoring.elasticsearch.hosts:
+- http://logging-elasticsearch:9200
