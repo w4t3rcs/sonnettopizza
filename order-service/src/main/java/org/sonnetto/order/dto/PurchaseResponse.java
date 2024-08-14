@@ -13,11 +13,11 @@ import java.util.List;
 @AllArgsConstructor @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PurchaseResponse implements Serializable {
-    private List<Long> productIds;
+    private List<String> productNames;
     private Float summary;
     private String currency;
 
     public static PurchaseResponse fromPurchase(Purchase purchase) {
-        return new PurchaseResponse(purchase.getProductIds(), purchase.getSummary(), purchase.getCurrency());
+        return new PurchaseResponse(purchase.getProductNames(), purchase.getSummary(), purchase.getCurrency());
     }
 }
