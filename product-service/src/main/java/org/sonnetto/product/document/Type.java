@@ -1,4 +1,4 @@
-package org.sonnetto.product.entity;
+package org.sonnetto.product.document;
 
 public enum Type {
     PIZZA,

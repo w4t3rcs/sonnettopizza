@@ -1,9 +1,9 @@
 package org.sonnetto.notification.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.sonnetto.notification.document.Notification;
 import org.sonnetto.notification.dto.NotificationRequest;
 import org.sonnetto.notification.dto.NotificationResponse;
-import org.sonnetto.notification.entity.Notification;
 import org.sonnetto.notification.exception.NotificationNotFoundException;
 import org.sonnetto.notification.repository.NotificationRepository;
 import org.sonnetto.notification.sender.MessageSender;

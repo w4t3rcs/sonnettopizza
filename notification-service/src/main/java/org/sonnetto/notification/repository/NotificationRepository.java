@@ -1,6 +1,6 @@
 package org.sonnetto.notification.repository;
 
-import org.sonnetto.notification.entity.Notification;
+import org.sonnetto.notification.document.Notification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;

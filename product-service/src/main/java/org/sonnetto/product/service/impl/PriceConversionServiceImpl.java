@@ -1,6 +1,6 @@
 package org.sonnetto.product.service.impl;
 
-import org.sonnetto.product.entity.Price;
+import org.sonnetto.product.document.Price;
 import org.sonnetto.product.service.PriceConversionService;
 import org.springframework.stereotype.Service;
 

@@ -2,9 +2,9 @@ package org.sonnetto.product.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sonnetto.product.document.Product;
 import org.sonnetto.product.dto.ProductRequest;
 import org.sonnetto.product.dto.ProductResponse;
-import org.sonnetto.product.entity.Product;
 import org.sonnetto.product.exception.ProductNotFoundException;
 import org.sonnetto.product.repository.ProductRepository;
 import org.sonnetto.product.service.PriceConversionService;
@@ -42,16 +42,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Cacheable("productCache")
     @Transactional(readOnly = true)
-    public ProductResponse getProduct(Long id) {
-        return ProductResponse.fromProduct(productRepository.findById(id)
+    public ProductResponse getProduct(String name) {
+        return ProductResponse.fromProduct(productRepository.findById(name)
                 .orElseThrow(ProductNotFoundException::new));
     }
 
     @Override
     @Cacheable("convertedProductCache")
     @Transactional(readOnly = true)
-    public ProductResponse getProductWithConvertedPrice(Long id, String currency) {
-        Product product = productRepository.findById(id)
+    public ProductResponse getProductWithConvertedPrice(String name, String currency) {
+        Product product = productRepository.findById(name)
                 .orElseThrow(ProductNotFoundException::new);
         priceConversionService.convertPrice(product.getPrice(), currency);
         return ProductResponse.fromProduct(product);
@@ -60,8 +60,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Caching(put = @CachePut("productCache"))
     @Transactional
-    public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
-        Product product = productRepository.findById(id)
+    public ProductResponse updateProduct(String name, ProductRequest productRequest) {
+        Product product = productRepository.findById(name)
                 .orElseThrow(ProductNotFoundException::new);
         if (productRequest.getName() != null) product.setName(productRequest.getName());
         if (productRequest.getType() != null) product.setType(productRequest.getType());
@@ -73,8 +73,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Caching(evict = @CacheEvict("productCache"))
     @Transactional
-    public Long deleteProduct(Long id) {
-        productRepository.deleteById(id);
-        return id;
+    public String deleteProduct(String name) {
+        productRepository.deleteById(name);
+        return name;
     }
 }

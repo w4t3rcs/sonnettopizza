@@ -3,8 +3,8 @@ package org.sonnetto.notification.dto;
 import jakarta.validation.Valid;
 import lombok.Builder;
 import lombok.Data;
-import org.sonnetto.notification.entity.Message;
-import org.sonnetto.notification.entity.Notification;
+import org.sonnetto.notification.document.Message;
+import org.sonnetto.notification.document.Notification;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

@@ -1,17 +1,6 @@
 server:
   port: 8083
 spring:
-  datasource:
-    username: user
-    password: password
-    url: jdbc:mysql://product-service-mysql:3306
-    name: productdb
-    hikari:
-      initialization-fail-timeout: 0
-  jpa:
-    hibernate:
-      ddl-auto: create
-    show-sql: true
   cache:
     type: redis
     redis:
@@ -19,6 +8,11 @@ spring:
       enable-statistics: true
       time-to-live: 2m
   data:
+    mongodb:
+      host: product-service-mongodb
+      username: user
+      password: password
+      database: productdb
     redis:
       host: product-service-redis
       password: password

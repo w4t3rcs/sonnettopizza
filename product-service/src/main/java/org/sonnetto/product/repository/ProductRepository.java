@@ -1,7 +1,7 @@
 package org.sonnetto.product.repository;
 
-import org.sonnetto.product.entity.Product;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.sonnetto.product.document.Product;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends MongoRepository<Product, String> {
 }

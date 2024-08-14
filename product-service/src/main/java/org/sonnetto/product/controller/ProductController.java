@@ -26,27 +26,27 @@ public class ProductController {
 
     @GetMapping
     public PagedModel<ProductResponse> getProducts(
-            @SortDefault(sort = "id", direction = Sort.Direction.ASC) @PageableDefault(size = 25) Pageable pageable) {
+            @SortDefault(sort = "name", direction = Sort.Direction.ASC) @PageableDefault(size = 25) Pageable pageable) {
         return productService.getProducts(pageable);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.getProduct(id));
+    @GetMapping("/{name}")
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable String name) {
+        return ResponseEntity.ok(productService.getProduct(name));
     }
 
-    @GetMapping(path = "/{id}", params = "currency")
-    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id, @RequestParam String currency) {
-        return ResponseEntity.ok(productService.getProductWithConvertedPrice(id, currency));
+    @GetMapping(path = "/{name}", params = "currency")
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable String name, @RequestParam String currency) {
+        return ResponseEntity.ok(productService.getProductWithConvertedPrice(name, currency));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
-        return ResponseEntity.ok(productService.updateProduct(id, productRequest));
+    @PutMapping("/{name}")
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable String name, @RequestBody ProductRequest productRequest) {
+        return ResponseEntity.ok(productService.updateProduct(name, productRequest));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteProduct(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.deleteProduct(id));
+    @DeleteMapping("/{name}")
+    public ResponseEntity<String> deleteProduct(@PathVariable String name) {
+        return ResponseEntity.ok(productService.deleteProduct(name));
     }
 }

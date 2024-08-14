@@ -144,16 +144,17 @@ services:
       - ./logs:/logs
     networks:
       - sonnetto
-  product-service-mysql:
-    container_name: sonnetto-product-service-mysql
-    image: mysql:9
+  product-service-mongodb:
+    container_name: sonnetto-product-service-mongodb
+    image: mongo:8.0-rc
     environment:
-      MYSQL_DATABASE: ${MYSQL_PRODUCT_SERVICE_DB}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGODB_PRODUCT_SERVICE_DB}
+    ports:
+      - '27017:27017'
     volumes:
-      - product-service-db:/var/lib/mysql
+      - product-service-db:/data/db
     networks:
       - sonnetto
   product-service-redis:
@@ -170,10 +171,6 @@ services:
     pull_policy: always
     environment:
       SPRING_PROFILES_ACTIVE: default
-      SPRING_DATASOURCE_URL: ${MYSQL_PRODUCT_SERVICE_URL}/${MYSQL_PRODUCT_SERVICE_DB}
-      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
-      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
-      SPRING_JPA_HIBERNATE_DDL_AUTO: create
     ports:
       - '8083:8083'
     depends_on:

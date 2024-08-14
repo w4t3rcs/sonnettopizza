@@ -10,11 +10,11 @@ public interface ProductService {
 
     PagedModel<ProductResponse> getProducts(Pageable pageable);
 
-    ProductResponse getProduct(Long id);
+    ProductResponse getProduct(String name);
 
-    ProductResponse getProductWithConvertedPrice(Long id, String currency);
+    ProductResponse getProductWithConvertedPrice(String name, String currency);
 
-    ProductResponse updateProduct(Long id, ProductRequest productRequest);
+    ProductResponse updateProduct(String name, ProductRequest productRequest);
 
-    Long deleteProduct(Long id);
+    String deleteProduct(String name);
 }

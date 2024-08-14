@@ -1,7 +1,7 @@
 package org.sonnetto.notification.sender.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.sonnetto.notification.entity.Message;
+import org.sonnetto.notification.document.Message;
 import org.sonnetto.notification.sender.MessageSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
