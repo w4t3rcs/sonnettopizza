@@ -10,20 +10,20 @@ import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
 
-public class ProductIdListValidator implements ConstraintValidator<ProductIdList, List<Long>> {
+public class ProductNameListValidator implements ConstraintValidator<ProductNameList, List<String>> {
     private ProductClient productClient;
 
     @Override
-    public void initialize(ProductIdList constraintAnnotation) {
+    public void initialize(ProductNameList constraintAnnotation) {
         this.productClient = ApplicationContextContainer.getApplicationContext().getBean(ProductClient.class);
     }
 
     @Override
-    public boolean isValid(List<Long> ids, ConstraintValidatorContext constraintValidatorContext) {
-        if (ids == null || ids.isEmpty()) return false;
-        return Boolean.TRUE.equals(Flux.fromIterable(ids)
+    public boolean isValid(List<String> names, ConstraintValidatorContext constraintValidatorContext) {
+        if (names == null || names.isEmpty()) return false;
+        return Boolean.TRUE.equals(Flux.fromIterable(names)
                 .publishOn(Schedulers.boundedElastic())
-                .map(id -> productClient.getProductHead(id).getStatusCode())
+                .map(name -> productClient.getProductHead(name).getStatusCode())
                 .all(HttpStatusCode::is2xxSuccessful)
                 .block());
     }

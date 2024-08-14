@@ -49,9 +49,9 @@ public class StripeFactoryImpl implements StripeFactory {
     @Override
     public Session createSession(Order order, Customer customer) throws StripeException {
         Purchase purchase = order.getPurchase();
-        Float totalAmount = Flux.fromIterable(purchase.getProductIds())
+        Float totalAmount = Flux.fromIterable(purchase.getProductNames())
                 .publishOn(Schedulers.boundedElastic())
-                .mapNotNull((id) -> productClient.getProduct(id, purchase.getCurrency())
+                .mapNotNull((name) -> productClient.getProduct(name, purchase.getCurrency())
                         .getBody())
                 .reduce(0.0f, (total, productResponse) -> total + productResponse.getPrice().getValue())
                 .block();

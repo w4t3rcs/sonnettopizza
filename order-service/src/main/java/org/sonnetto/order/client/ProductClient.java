@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "products", url = "${sonnetto.urls.product-service}")
 public interface ProductClient {
-    @RequestMapping(path = "/{id}", method = RequestMethod.HEAD)
-    ResponseEntity<?> getProductHead(@PathVariable Long id);
+    @RequestMapping(path = "/{name}", method = RequestMethod.HEAD)
+    ResponseEntity<?> getProductHead(@PathVariable String name);
 
-    @GetMapping(path = "/{id}", params = "currency")
-    ResponseEntity<ProductResponse> getProduct(@PathVariable Long id, @RequestParam String currency);
+    @GetMapping(path = "/{name}", params = "currency")
+    ResponseEntity<ProductResponse> getProduct(@PathVariable String name, @RequestParam String currency);
 }

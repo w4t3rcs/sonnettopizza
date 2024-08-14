@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import org.sonnetto.order.validation.ProductIdList;
+import org.sonnetto.order.validation.ProductNameList;
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,9 +17,9 @@ import java.util.List;
 @AllArgsConstructor @NoArgsConstructor
 @Embeddable
 public class Purchase implements Serializable {
-    @ProductIdList
+    @ProductNameList
     @ElementCollection
-    private List<Long> productIds;
+    private List<String> productNames;
     @Min(0)
     private Float summary;
     @NotBlank
