@@ -5,7 +5,11 @@ import com.stripe.model.Customer;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sonnetto.order.client.ProductClient;
 import org.sonnetto.order.client.UserClient;
 import org.sonnetto.order.component.StripeFactory;
@@ -19,7 +23,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class StripeFactoryImpl implements StripeFactory {
@@ -28,11 +35,24 @@ public class StripeFactoryImpl implements StripeFactory {
     private final ProductClient productClient;
 
     @Override
-    public Customer createCustomer(Order order) throws StripeException {
+    public Customer createCustomer(Order order) {
+        try {
+            CompletableFuture<CustomerCreateParams> customerParams = this.createCustomerParams(order);
+            return Customer.create(customerParams.get());
+        } catch (StripeException | ExecutionException | InterruptedException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    @CircuitBreaker(name = "user-service")
+    @Retry(name = "user-service")
+    @TimeLimiter(name = "user-service")
+    private CompletableFuture<CustomerCreateParams> createCustomerParams(Order order) {
         UserResponse user = userClient.getUser(order.getUserId())
                 .getBody();
         Address address = order.getAddress();
-        CustomerCreateParams customerCreateParams = CustomerCreateParams.builder()
+        return CompletableFuture.supplyAsync(() -> CustomerCreateParams.builder()
                 .setAddress(CustomerCreateParams.Address.builder()
                         .setCountry(address.getCountry())
                         .setCity(address.getCity())
@@ -42,12 +62,24 @@ public class StripeFactoryImpl implements StripeFactory {
                         .build())
                 .setName(user.getName())
                 .setEmail(user.getEmail())
-                .build();
-        return Customer.create(customerCreateParams);
+                .build());
     }
 
     @Override
-    public Session createSession(Order order, Customer customer) throws StripeException {
+    public Session createSession(Order order, Customer customer) {
+        try {
+            CompletableFuture<SessionCreateParams> sessionParams = this.createSessionParams(order, customer);
+            return Session.create(sessionParams.get());
+        } catch (StripeException | ExecutionException | InterruptedException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    @CircuitBreaker(name = "product-service")
+    @Retry(name = "product-service")
+    @TimeLimiter(name = "product-service")
+    private CompletableFuture<SessionCreateParams> createSessionParams(Order order, Customer customer) {
         Purchase purchase = order.getPurchase();
         Float totalAmount = Flux.fromIterable(purchase.getProductNames())
                 .publishOn(Schedulers.boundedElastic())
@@ -55,7 +87,7 @@ public class StripeFactoryImpl implements StripeFactory {
                         .getBody())
                 .reduce(0.0f, (total, productResponse) -> total + productResponse.getPrice().getValue())
                 .block();
-        SessionCreateParams.Builder sessionBuilder = SessionCreateParams.builder()
+        return CompletableFuture.supplyAsync(() -> SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setCustomer(customer.getId())
@@ -70,7 +102,9 @@ public class StripeFactoryImpl implements StripeFactory {
                                 .setCurrency(purchase.getCurrency())
                                 .setUnitAmount((long) (Objects.requireNonNull(totalAmount) * 100))
                                 .build())
-                        .build());
-        return Session.create(sessionBuilder.build());
+                        .build())
+                .build());
     }
+
+
 }

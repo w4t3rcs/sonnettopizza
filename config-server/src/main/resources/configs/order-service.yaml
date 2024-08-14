@@ -62,6 +62,47 @@ management:
   zipkin:
     tracing:
       endpoint: http://zipkin:9411
+resilience4j:
+  circuitbreaker:
+    instances:
+      user-service:
+        register-health-indicator: true
+        event-consumer-buffer-size: 10
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state:
+          seconds: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+      product-service:
+        register-health-indicator: true
+        event-consumer-buffer-size: 10
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state:
+          seconds: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+  timelimiter:
+    instances:
+      user-service:
+        timeout-duration:
+          seconds: 3
+      product-service:
+        timeout-duration:
+          seconds: 3
+  retry:
+    instances:
+      user-service:
+        max-attempts: 3
+        wait-duration:
+          seconds: 5
+      product-service:
+        max-attempts: 3
+        wait-duration:
+          seconds: 5
 eureka:
   client:
     service-url:
