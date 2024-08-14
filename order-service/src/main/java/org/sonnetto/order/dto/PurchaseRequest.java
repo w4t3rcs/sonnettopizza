@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PurchaseRequest implements Serializable {
-    private List<Long> productIds;
+    private List<String> productIds;
     private String currency;
 
     public Purchase toPurchase() {
