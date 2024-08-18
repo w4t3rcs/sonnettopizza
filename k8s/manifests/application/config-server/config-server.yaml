@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-server
+  labels:
+    app: config-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-server
+  template:
+    metadata:
+      name: config-server
+      labels:
+        app: config-server
+    spec:
+      containers:
+        - name: config-server
+          image: w4t3rcs/sonnetto-config-server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8761
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-server
+  labels:
+    app: config-server
+spec:
+  selector:
+    app: config-server
+  ports:
+    - protocol: TCP
+      port: 8761
+      targetPort: 8761
+  type: NodePort

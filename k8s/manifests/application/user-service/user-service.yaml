@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      name: user-service
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: w4t3rcs/sonnetto-user-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: user-service
+            - secretRef:
+                name: user-service-secret
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+  type: NodePort
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service
+data:
+  SPRING_PROFILES_ACTIVE: "default"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/userdb"
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "create"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: user-service-secret
+data:
+  SPRING_DATASOURCE_USERNAME: "user"
+  SPRING_DATASOURCE_PASSWORD: "password"

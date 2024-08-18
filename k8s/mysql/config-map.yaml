@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mysql-cm
-data:
-  mysql-server: "mysql"
-  mysql-user-username: "user"

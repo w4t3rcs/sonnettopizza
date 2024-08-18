@@ -9,7 +9,7 @@ spring:
       time-to-live: 2m
   data:
     mongodb:
-      host: product-service-mongodb
+      host: mongodb
       username: user
       password: password
       database: productdb

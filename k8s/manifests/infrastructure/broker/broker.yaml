@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broker
+  labels:
+    app: broker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: broker
+  template:
+    metadata:
+      name: broker
+      labels:
+        app: broker
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: broker
+          image: apache/kafka:3.8.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9092
+              protocol: TCP
+            - containerPort: 29093
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: broker
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: broker
+  labels:
+    app: broker
+spec:
+  selector:
+    app: broker
+  ports:
+    - protocol: TCP
+      port: 9092
+      targetPort: 9092
+      name: broker
+    - protocol: TCP
+      port: 29093
+      targetPort: 29093
+      name: broker-kraft
+  type: NodePort
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: broker
+data:
+  KAFKA_NODE_ID: "1"
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+  KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT_HOST://localhost:9092,PLAINTEXT://broker:19092'
+  KAFKA_PROCESS_ROLES: 'broker,controller'
+  KAFKA_CONTROLLER_QUORUM_VOTERS: '1@broker:29093'
+  KAFKA_LISTENERS: 'CONTROLLER://:29093,PLAINTEXT_HOST://:9092,PLAINTEXT://:19092'
+  KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+  KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+  CLUSTER_ID: '4L6g3nShT-eMCtK--X86sw'
+  KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+  KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
+  KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
+  KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
+  KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'

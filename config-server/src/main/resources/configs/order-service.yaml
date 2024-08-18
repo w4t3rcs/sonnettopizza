@@ -4,7 +4,7 @@ spring:
   datasource:
     username: user
     password: password
-    url: jdbc:mysql://order-service-mysql:3306
+    url: jdbc:mysql://mysql:3306
     name: orderdb
     hikari:
       initialization-fail-timeout: 0
