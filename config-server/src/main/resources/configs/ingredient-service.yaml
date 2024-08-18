@@ -26,8 +26,7 @@ spring:
       time-to-live: 2m
   data:
     redis:
-      host: ingredient-service-redis
-      password: password
+      host: redis
       port: 6379
 springdoc:
   show-actuator: true

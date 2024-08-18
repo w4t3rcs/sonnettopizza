@@ -26,8 +26,7 @@ spring:
       time-to-live: 2m
   data:
     redis:
-      host: user-service-redis
-      password: password
+      host: redis
       port: 6379
   kafka:
     bootstrap-servers: broker:19092
