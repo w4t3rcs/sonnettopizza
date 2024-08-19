@@ -25,8 +25,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: user-service
-            - secretRef:
-                name: user-service-secret
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -51,12 +49,3 @@ metadata:
 data:
   SPRING_PROFILES_ACTIVE: "default"
   SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/userdb"
-  SPRING_JPA_HIBERNATE_DDL_AUTO: "create"
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: user-service-secret
-data:
-  SPRING_DATASOURCE_USERNAME: "user"
-  SPRING_DATASOURCE_PASSWORD: "password"

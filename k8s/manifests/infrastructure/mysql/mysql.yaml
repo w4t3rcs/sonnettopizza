@@ -59,9 +59,7 @@ kind: Secret
 metadata:
   name: mysql-secret
 data:
-  MYSQL_USER: user
-  MYSQL_PASSWORD: password
-  MYSQL_ROOT_PASSWORD: password
+  MYSQL_ROOT_PASSWORD: cGFzc3dvcmQ=
 ---
 apiVersion: v1
 kind: PersistentVolume
