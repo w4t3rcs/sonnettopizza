@@ -48,4 +48,3 @@ metadata:
   name: user-service
 data:
   SPRING_PROFILES_ACTIVE: "default"
-  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/userdb"
