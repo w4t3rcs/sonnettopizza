@@ -2,7 +2,7 @@ server:
   port: 8082
 spring:
   datasource:
-    username: user
+    username: root
     password: password
     url: jdbc:mysql://mysql:3306
     name: ingredientdb
