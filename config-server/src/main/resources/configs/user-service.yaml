@@ -4,10 +4,7 @@ spring:
   datasource:
     username: user
     password: password
-    url: jdbc:mysql://mysql:3306
-    name: userdb
-    hikari:
-      initialization-fail-timeout: 0
+    url: jdbc:mysql://mysql:3306/userdb?createDatabaseIfNotExist=true&useSSL=false&user=${SPRING_DATASOURCE_USERNAME}
   jpa:
     hibernate:
       ddl-auto: create
