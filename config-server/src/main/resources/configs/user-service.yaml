@@ -14,7 +14,7 @@ spring:
         cache:
           use_second_level: true
           region:
-            factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+            factory_class: org.hibernate.cache.jcache.internal.JCacheRegionFactory
   cache:
     type: redis
     redis:
