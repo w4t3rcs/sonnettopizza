@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.proxy.HibernateProxy;
 import org.sonnetto.order.validation.UserId;
 
@@ -16,8 +15,6 @@ import java.util.Objects;
 
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Table(name = "orders")
 public class Order implements Serializable {

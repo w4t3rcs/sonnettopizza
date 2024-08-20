@@ -12,10 +12,6 @@ spring:
     properties:
       hibernate:
         generate_statistics: true
-        cache:
-          use_second_level: true
-          region:
-            factory_class: org.hibernate.cache.ehcache.internal.EhcacheRegionFactory
   cache:
     type: redis
     redis:

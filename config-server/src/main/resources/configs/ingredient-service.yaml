@@ -14,10 +14,7 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        cache:
-          use_second_level: true
-          region:
-            factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+        generate_statistics: true
   cache:
     type: redis
     redis:
