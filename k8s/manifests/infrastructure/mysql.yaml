@@ -23,8 +23,6 @@ spec:
             - containerPort: 3306
               protocol: TCP
           envFrom:
-            - configMapRef:
-                name: mysql
             - secretRef:
                 name: mysql-secret
           volumeMounts:
@@ -57,18 +55,10 @@ spec:
   type: NodePort
 ---
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mysql
-data:
-  MYSQL_USER: "user"
----
-apiVersion: v1
 kind: Secret
 metadata:
   name: mysql-secret
 data:
-  MYSQL_PASSWORD: cGFzc3dvcmQ=
   MYSQL_ROOT_PASSWORD: cGFzc3dvcmQ=
 ---
 apiVersion: v1
@@ -102,6 +92,6 @@ metadata:
   name: mysql-initdb-config
 data:
   initdb.sql: |
+    CREATE DATABASE IF NOT EXISTS userdb;
     CREATE DATABASE IF NOT EXISTS ingredientdb;
     CREATE DATABASE IF NOT EXISTS orderdb;
-    #    CREATE DATABASE IF NOT EXISTS userdb;

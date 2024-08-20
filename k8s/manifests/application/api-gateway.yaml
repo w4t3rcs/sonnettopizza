@@ -1,50 +1,50 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ingredient-service
+  name: api-gateway
   labels:
-    app: ingredient-service
+    app: api-gateway
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ingredient-service
+      app: api-gateway
   template:
     metadata:
-      name: ingredient-service
+      name: api-gateway
       labels:
-        app: ingredient-service
+        app: api-gateway
     spec:
       containers:
-        - name: ingredient-service
-          image: w4t3rcs/sonnetto-ingredient-service:latest
+        - name: api-gateway
+          image: w4t3rcs/sonnetto-api-gateway:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8082
+            - containerPort: 8080
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: ingredient-service
+                name: api-gateway
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ingredient-service
+  name: api-gateway
   labels:
-    app: ingredient-service
+    app: api-gateway
 spec:
   selector:
-    app: ingredient-service
+    app: api-gateway
   ports:
     - protocol: TCP
-      port: 8082
-      targetPort: 8082
+      port: 8080
+      targetPort: 8080
   type: NodePort
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ingredient-service
+  name: api-gateway
 data:
   SPRING_PROFILES_ACTIVE: "default"
