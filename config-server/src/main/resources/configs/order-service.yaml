@@ -4,10 +4,7 @@ spring:
   datasource:
     username: user
     password: password
-    url: jdbc:mysql://mysql:3306
-    name: orderdb
-    hikari:
-      initialization-fail-timeout: 0
+    url: jdbc:mysql://mysql:3306/orderdb
   jpa:
     hibernate:
       ddl-auto: create

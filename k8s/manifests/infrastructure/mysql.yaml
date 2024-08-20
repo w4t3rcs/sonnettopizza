@@ -102,6 +102,6 @@ metadata:
   name: mysql-initdb-config
 data:
   initdb.sql: |
-#    CREATE DATABASE IF NOT EXISTS userdb;
-#    CREATE DATABASE IF NOT EXISTS ingredientdb;
-#    CREATE DATABASE IF NOT EXISTS orderdb;
+    CREATE DATABASE IF NOT EXISTS ingredientdb;
+    CREATE DATABASE IF NOT EXISTS orderdb;
+    #    CREATE DATABASE IF NOT EXISTS userdb;
