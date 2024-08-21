@@ -61,7 +61,7 @@ spec:
   capacity:
     storage: 200Mi
   hostPath:
-    path: /data
+    path: /data/redis
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

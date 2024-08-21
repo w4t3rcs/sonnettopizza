@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      name: keycloak
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:20.0.2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8282
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: keycloak-secret
+            - configMapRef:
+                name: keycloak
+          env:
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: MYSQL_ROOT_PASSWORD
+                  name: mysql-secret
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+spec:
+  selector:
+    app: keycloak
+  ports:
+    - protocol: TCP
+      port: 8282
+      targetPort: 8282
+  type: NodePort
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-secret
+data:
+  KEYCLOAK_ADMIN_PASSWORD: cGFzc3dvcmQ=
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak
+data:
+  KEYCLOAK_ADMIN: "admin"
+  KC_HOSTNAME: "keycloak"
+  KC_HOSTNAME_PORT: "8282"
+  KC_HOSTNAME_STRICT_BACKCHANNEL: "false"
+  KC_HTTP_ENABLED: "true"
+  KC_HOSTNAME_STRICT_HTTPS: "false"
+  KC_HEALTH_ENABLED: "true"
+  KC_DB: "mysql"
+  KC_DB_USERNAME: "root"
+  KC_DB_URL: "jdbc:mysql://mysql:3306/keycloakdb"
+  KC_FEATURES: "preview"
