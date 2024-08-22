@@ -3,10 +3,11 @@ mvn clean compile test jib:build
 # Creating k8s cluster using Kind (https://kind.sigs.k8s.io/)
 cd ./k8s/kind || exit
 kind create cluster --name=sonnetto-microservices --config kind-config.yaml
-# Creating needed infrastructure for microservices (kafka, redis, mysql, etc)
+# Deploying ECK
+kubectl create -f https://download.elastic.co/downloads/eck/2.14.0/crds.yaml
+kubectl apply -f https://download.elastic.co/downloads/eck/2.14.0/operator.yaml
+# Deploying needed infrastructure for microservices (kafka, redis, mysql, etc)
 cd ../manifests/ || exit
-kubectl --context docker-desktop --namespace=default apply -f ./infrastructure/
-# Creating microservices
-cd ../application/ || exit
-kubectl --context docker-desktop --namespace=default apply -f ./eureka-server/
-kubectl --context docker-desktop --namespace=default apply -f ./config-server/
+kubectl apply -f ./infrastructure/
+# Deploying microservices
+kubectl apply -f ./application/
