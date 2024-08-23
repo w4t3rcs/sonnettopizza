@@ -28,7 +28,7 @@ pipeline {
 
         stage('Deploy to K8s') {
             steps {
-                sh ' kubectl apply ./k8s/manifests/application'
+                sh ' kubectl apply -f ./k8s/manifests/application'
             }
         }
     }
