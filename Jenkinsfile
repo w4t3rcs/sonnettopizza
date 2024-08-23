@@ -20,9 +20,15 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Containerize') {
             steps {
                 sh 'mvn jib:build'
+            }
+        }
+
+        stage('Deploy to K8s') {
+            steps {
+                sh ' kubectl apply ./k8s/manifests/application'
             }
         }
     }
