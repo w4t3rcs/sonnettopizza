@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: w4t3rcs
+      changes:
+        - createTable:
+            tableName: support_sessions
+            columns:
+              - column:
+                  name: id
+                  autoIncrement: true
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: request_sender_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: request_content
+                  type: varchar(2048)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: result
+                  type: varchar(2048)
+                  constraints:
+                    nullable: false
