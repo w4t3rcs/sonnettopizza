@@ -26,7 +26,13 @@ pipeline {
             }
         }
 
-        stage('Deploy to K8s') {
+        stage('Deploy infrastructure to K8s') {
+            steps {
+                sh ' kubectl apply -f ./k8s/manifests/infrastructure'
+            }
+        }
+
+        stage('Deploy microservices to K8s') {
             steps {
                 sh ' kubectl apply -f ./k8s/manifests/application'
             }
