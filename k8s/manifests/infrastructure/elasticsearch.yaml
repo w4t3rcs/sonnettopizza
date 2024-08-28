@@ -8,13 +8,6 @@ spec:
   nodeSets:
     - name: default
       count: 1
-      podTemplate:
-        spec:
-          containers:
-            - name: elasticsearch
-              env:
-                - name: ES_JAVA_OPTS
-                  value: -Xms2g -Xmx1g
       config:
         node.store.allow_mmap: false
       volumeClaimTemplates:
@@ -24,5 +17,5 @@ spec:
             accessModes: [ "ReadWriteOnce" ]
             resources:
               requests:
-                storage: 50Gi
+                storage: 5Gi
             storageClassName: standard

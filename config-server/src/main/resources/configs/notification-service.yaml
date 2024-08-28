@@ -3,7 +3,7 @@ server:
 spring:
   elasticsearch:
     username: elastic
-    password: 74rU3L46q7N0oTNd7EmF90Hh
+    password: elastic
     uris: http://elasticsearch-es-http:9200
   cache:
     type: redis
