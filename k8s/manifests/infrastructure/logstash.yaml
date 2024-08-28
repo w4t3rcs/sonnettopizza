@@ -16,11 +16,13 @@ spec:
             port => 5044
           }
         }
+        
         output {
           elasticsearch {
             hosts => [ "http://elasticsearch:9200" ]
             user => "elastic"
             password => "elastic"
+            index => "sonnetto-logs"
           }
         }
   services:
