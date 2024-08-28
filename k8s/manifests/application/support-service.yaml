@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: support-service
+  labels:
+    app: support-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: support-service
+  template:
+    metadata:
+      name: support-service
+      labels:
+        app: support-service
+    spec:
+      containers:
+        - name: support-service
+          image: w4t3rcs/sonnetto-support-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8086
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: support-service
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: support-service
+  labels:
+    app: support-service
+spec:
+  selector:
+    app: support-service
+  ports:
+    - protocol: TCP
+      port: 8086
+      targetPort: 8086
+  type: NodePort
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: support-service
+data:
+  SPRING_PROFILES_ACTIVE: "default"
