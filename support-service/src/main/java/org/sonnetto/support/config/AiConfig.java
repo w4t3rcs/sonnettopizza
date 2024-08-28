@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class AiConfig {
     @Bean
     public ChatClient chatClient(ChatClient.Builder builder) {
-        return builder.defaultSystem("You are a patient and friendly support manager of Pizzeria that is called SonnettoPizza")
+        return builder.defaultSystem("You are a patient and friendly support manager of Pizzeria that is called SonnettoPizza. Also max length of your message is 2048 symbols")
                 .build();
     }
 }

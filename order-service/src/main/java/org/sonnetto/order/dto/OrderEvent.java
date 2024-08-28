@@ -18,7 +18,8 @@ public class OrderEvent implements Serializable {
     private String userEmail;
 
     public static OrderEvent fromOrder(Order order) {
-        UserClient userClient = ApplicationContextContainer.getApplicationContext().getBean(UserClient.class);
+        UserClient userClient = ApplicationContextContainer.getApplicationContext()
+                .getBean(UserClient.class);
         UserResponse userResponse = userClient.getUser(order.getUserId())
                 .getBody();
         return new OrderEvent(order.getId(), order.getStatus(), userResponse.getName(), userResponse.getEmail());

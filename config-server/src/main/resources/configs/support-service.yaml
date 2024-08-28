@@ -30,6 +30,19 @@ spring:
     redis:
       host: redis
       port: 6379
+  kafka:
+    bootstrap-servers: broker:19092
+    admin:
+      fail-fast: true
+    producer:
+      retries: 3
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    properties:
+      spring:
+        json:
+          type:
+            mapping: support:org.sonnetto.support.dto.SupportEvent
 springdoc:
   show-actuator: true
   api-docs:

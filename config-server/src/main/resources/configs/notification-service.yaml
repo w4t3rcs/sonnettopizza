@@ -28,7 +28,7 @@ spring:
         spring:
           json:
             type:
-              mapping: user:org.sonnetto.notification.dto.UserEvent, order:org.sonnetto.notification.dto.OrderEvent
+              mapping: user:org.sonnetto.notification.dto.UserEvent, order:org.sonnetto.notification.dto.OrderEvent, support:org.sonnetto.notification.dto.SupportEvent
             trusted:
               packages: '*'
   mail:
