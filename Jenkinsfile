@@ -8,32 +8,25 @@ pipeline {
             }
         }
 
-        stage('Compile') {
+        stage('Check code quality') {
             steps {
-                sh 'mvn clean compile'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'mvn test'
+                sh 'mvn clean verify sonar:sonar' +
+                        ' -Dsonar.projectKey=sonnettopizza' +
+                        ' -Dsonar.projectName=\'sonnettopizza\'' +
+                        ' -Dsonar.host.url=http://localhost:9000' +
+                        ' -Dsonar.token=sonnettopizza'
             }
         }
 
         stage('Containerize') {
             steps {
-                sh 'mvn jib:build'
+                sh 'mvn clean compile jib:build'
             }
         }
 
-        stage('Deploy infrastructure to K8s') {
+        stage('Deploy to K8s') {
             steps {
                 sh ' kubectl apply -f ./k8s/manifests/infrastructure'
-            }
-        }
-
-        stage('Deploy microservices to K8s') {
-            steps {
                 sh ' kubectl apply -f ./k8s/manifests/application'
             }
         }
