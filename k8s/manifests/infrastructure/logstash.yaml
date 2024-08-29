@@ -19,7 +19,7 @@ spec:
         
         output {
           elasticsearch {
-            hosts => [ "http://elasticsearch:9200" ]
+            hosts => [ "http://elasticsearch-es-http:9200" ]
             user => "elastic"
             password => "elastic"
             index => "sonnetto-logs"
