@@ -9,7 +9,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedModel;
 import org.springframework.data.web.SortDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductResponse> postProduct(@RequestBody ProductRequest productRequest) {
-        return new ResponseEntity<>(productService.createProduct(productRequest), HttpStatus.CREATED);
+        return ResponseEntity.ok(productService.createProduct(productRequest));
     }
 
     @GetMapping

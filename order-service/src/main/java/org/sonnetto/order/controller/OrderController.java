@@ -10,7 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedModel;
 import org.springframework.data.web.SortDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +21,7 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderResponse> postOrder(@RequestBody OrderRequest orderRequest) {
-        return new ResponseEntity<>(orderService.createOrder(orderRequest), HttpStatus.CREATED);
+        return ResponseEntity.ok(orderService.createOrder(orderRequest));
     }
 
     @GetMapping

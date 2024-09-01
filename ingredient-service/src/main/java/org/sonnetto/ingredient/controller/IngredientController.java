@@ -9,7 +9,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedModel;
 import org.springframework.data.web.SortDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,7 @@ public class IngredientController {
 
     @PostMapping
     public ResponseEntity<IngredientResponse> postIngredient(@RequestBody IngredientRequest ingredientRequest) {
-        return new ResponseEntity<>(ingredientService.createIngredient(ingredientRequest), HttpStatus.CREATED);
+        return ResponseEntity.ok(ingredientService.createIngredient(ingredientRequest));
     }
 
     @GetMapping
