@@ -60,8 +60,7 @@ class UserServiceApplicationTests {
                 .body("id", Matchers.notNullValue())
                 .body("name", Matchers.is("j0hny"))
                 .body("email",  Matchers.is("j0hny@gmail.com"))
-                .body("role", Matchers.is("DEFAULT"))
-                .log();
+                .body("role", Matchers.is("DEFAULT"));
     }
 
     @Test
@@ -75,8 +74,7 @@ class UserServiceApplicationTests {
                 .statusCode(Matchers.is(200))
                 .body("name", Matchers.is("j0hny"))
                 .body("email",  Matchers.is("j0hny@gmail.com"))
-                .body("role", Matchers.is("DEFAULT"))
-                .log();
+                .body("role", Matchers.is("DEFAULT"));
     }
 
     @Test
@@ -99,8 +97,7 @@ class UserServiceApplicationTests {
                 .body("id", Matchers.notNullValue())
                 .body("name", Matchers.is("g1cae"))
                 .body("email",  Matchers.is("j0hny@gmail.com"))
-                .body("role", Matchers.is("ADMIN"))
-                .log();
+                .body("role", Matchers.is("ADMIN"));
     }
 
     @Test
@@ -111,7 +108,6 @@ class UserServiceApplicationTests {
                 .when()
                 .delete("/api/v1.0/users/1")
                 .then()
-                .statusCode(Matchers.is(200))
-                .log();
+                .statusCode(Matchers.is(200));
     }
 }
