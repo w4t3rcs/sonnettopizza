@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      name: grafana
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:9.1.7
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: grafana
+            - secretRef:
+                name: grafana-secret
+          volumeMounts:
+            - mountPath: /etc/grafana/provisioning/datasources/datasources.yml
+              name: datasources-config
+      restartPolicy: Always
+      volumes:
+        - name: datasources-config
+          configMap:
+            name: datasources-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  selector:
+    app: grafana
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: NodePort
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana
+data:
+  GF_SECURITY_ADMIN_USER: "grafana"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-secret
+data:
+  GF_SECURITY_ADMIN_PASSWORD: Z3JhZmFuYQ==
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: datasources-config
+data:
+  datasources.yml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus:9090
+        isDefault: true
+        access: proxy
+        editable: true
