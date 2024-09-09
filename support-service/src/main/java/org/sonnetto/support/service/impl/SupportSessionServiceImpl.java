@@ -1,8 +1,9 @@
 package org.sonnetto.support.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.sonnetto.support.dto.SupportSessionRequest;
+import org.sonnetto.support.dto.MessageRequest;
 import org.sonnetto.support.dto.SupportSessionResponse;
+import org.sonnetto.support.entity.Message;
 import org.sonnetto.support.entity.SupportSession;
 import org.sonnetto.support.exception.SupportSessionNotFoundException;
 import org.sonnetto.support.producer.SupportSessionProducer;
@@ -26,8 +27,9 @@ public class SupportSessionServiceImpl implements SupportSessionService {
     @Override
     @Caching(cacheable = @Cacheable("supportSessionCache"))
     @Transactional
-    public SupportSessionResponse createSupportSession(SupportSessionRequest supportSessionRequest) {
-        SupportSession supportSession = supportSessionRequest.toSupportSession();
+    public SupportSessionResponse createSupportSession(MessageRequest messageRequest) {
+        Message message = messageRequest.toMessage();
+        SupportSession supportSession = new SupportSession(null, message, null);
         supportSession.setResult(aiChatService.respond(supportSession));
         SupportSession savedSupportSession = supportSessionRepository.save(supportSession);
         supportSessionProducer.sendSupportSession("support.created", savedSupportSession);

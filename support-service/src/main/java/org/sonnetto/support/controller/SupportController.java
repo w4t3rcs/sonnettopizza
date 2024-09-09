@@ -1,7 +1,7 @@
 package org.sonnetto.support.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.sonnetto.support.dto.SupportSessionRequest;
+import org.sonnetto.support.dto.MessageRequest;
 import org.sonnetto.support.dto.SupportSessionResponse;
 import org.sonnetto.support.service.SupportSessionService;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +19,8 @@ public class SupportController {
     private final SupportSessionService supportSessionService;
 
     @PostMapping
-    public ResponseEntity<SupportSessionResponse> postSupportSession(@RequestBody SupportSessionRequest supportSessionRequest) {
-        return ResponseEntity.ok(supportSessionService.createSupportSession(supportSessionRequest));
+    public ResponseEntity<SupportSessionResponse> postSupportSession(@RequestBody MessageRequest messageRequest) {
+        return ResponseEntity.ok(supportSessionService.createSupportSession(messageRequest));
     }
 
     @GetMapping
