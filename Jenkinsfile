@@ -1,10 +1,14 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven3'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/w4t3rcs/sonnettopizza.git'
+                checkOut([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/w4t3rcs/sonnettopizza']]])
             }
         }
 
@@ -24,10 +28,21 @@ pipeline {
             }
         }
 
+        stage('Push to ECR') {
+            steps {
+                sh 'aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 961341518387.dkr.ecr.eu-north-1.amazonaws.com'
+
+                sh 'docker tag w4t3rcs/sonnetto-eureka-server:latest 961341518387.dkr.ecr.eu-north-1.amazonaws.com/w4t3rcs/sonnetto-eureka-server:latest'
+
+                sh 'docker push 961341518387.dkr.ecr.eu-north-1.amazonaws.com/w4t3rcs/sonnetto-eureka-server:latest'
+            }
+        }
+
         stage('Deploy to K8s') {
             steps {
-                sh ' kubectl apply -f ./k8s/manifests/infrastructure'
-                sh ' kubectl apply -f ./k8s/manifests/application'
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'K8s', namespace: '', serverUrl: '') {
+                    sh 'kubectl apply -f /k8s/cloud/manifests/application'
+                }
             }
         }
     }

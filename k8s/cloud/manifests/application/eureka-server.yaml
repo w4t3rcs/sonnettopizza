@@ -5,7 +5,7 @@ metadata:
   labels:
     app: eureka-server
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: eureka-server
@@ -17,12 +17,13 @@ spec:
     spec:
       containers:
         - name: eureka-server
-          image: w4t3rcs/sonnetto-eureka-server:latest
-          imagePullPolicy: Always
+          image: 961341518387.dkr.ecr.eu-north-1.amazonaws.com/w4t3rcs/sonnetto-eureka-server:latest
           ports:
             - containerPort: 8761
               protocol: TCP
-      restartPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: cloud-config
 ---
 apiVersion: v1
 kind: Service
@@ -37,4 +38,4 @@ spec:
     - protocol: TCP
       port: 8761
       targetPort: 8761
-  type: NodePort
+  type: LoadBalancer

@@ -21,10 +21,3 @@ management:
   tracing:
     sampling:
       probability: 1
-  zipkin:
-    tracing:
-      endpoint: http://zipkin:9411
-eureka:
-  client:
-    service-url:
-      defaultZone: http://eureka-server:8761/eureka/

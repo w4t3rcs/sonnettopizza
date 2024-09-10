@@ -24,7 +24,7 @@ spec:
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: api-gateway
+                name: cloud-config
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -41,10 +41,3 @@ spec:
       port: 8080
       targetPort: 8080
   type: NodePort
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: api-gateway
-data:
-  SPRING_PROFILES_ACTIVE: "default"

@@ -24,7 +24,7 @@ spec:
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: notification-service
+                name: cloud-config
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -41,10 +41,3 @@ spec:
       port: 8085
       targetPort: 8085
   type: NodePort
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: notification-service
-data:
-  SPRING_PROFILES_ACTIVE: "default"

@@ -24,7 +24,7 @@ spec:
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: user-service
+                name: local-config
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -41,10 +41,3 @@ spec:
       port: 8081
       targetPort: 8081
   type: NodePort
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: user-service
-data:
-  SPRING_PROFILES_ACTIVE: "default"
