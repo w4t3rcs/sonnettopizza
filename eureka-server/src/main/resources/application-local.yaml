@@ -1,0 +1,13 @@
+eureka:
+  instance:
+    hostname: eureka-server
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+  security:
+    user: eureka
+    password: eureka
+management:
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411

@@ -1,0 +1,21 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    username: root
+    password: password
+    url: jdbc:mysql://mysql:3306/userdb
+  data:
+    redis:
+      host: redis
+      port: 6379
+  kafka:
+    bootstrap-servers: broker:19092
+management:
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
