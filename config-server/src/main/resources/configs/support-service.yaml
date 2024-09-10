@@ -3,16 +3,11 @@ server:
 spring:
   ai:
     ollama:
-      base-url: http://ollama:11434
       chat:
         model: llama2
     retry:
       on-client-errors: true
       max-attempts: 3
-  datasource:
-    username: root
-    password: password
-    url: jdbc:mysql://mysql:3306/supportdb
   jpa:
     hibernate:
       ddl-auto: create
@@ -26,12 +21,7 @@ spring:
       cache-null-values: false
       enable-statistics: true
       time-to-live: 2m
-  data:
-    redis:
-      host: redis
-      port: 6379
   kafka:
-    bootstrap-servers: broker:19092
     admin:
       fail-fast: true
     producer:
@@ -60,13 +50,3 @@ management:
   tracing:
     sampling:
       probability: 1
-  zipkin:
-    tracing:
-      endpoint: http://zipkin:9411
-eureka:
-  client:
-    service-url:
-      defaultZone: http://eureka-server:8761/eureka/
-sonnetto:
-  urls:
-    user-service: http://user-service/8081/api/v1.0/users

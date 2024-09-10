@@ -1,0 +1,21 @@
+spring:
+  data:
+    mongodb:
+      host: mongodb
+      username: user
+      password: password
+      database: productdb
+    redis:
+      host: redis
+      port: 6379
+management:
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+sonnetto:
+  urls:
+    ingredient-service: http://ingredient-service/8082/api/v1.0/ingredients

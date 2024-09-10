@@ -1,10 +1,11 @@
-server:
-  port: 8081
 spring:
+  ai:
+    ollama:
+      base-url: http://127.0.0.1:11434
   datasource:
     username: root
-    password: sonnettomysql
-    url: jdbc:mysql://127.0.0.1:3306/userdb
+    password: password
+    url: jdbc:mysql://127.0.0.1:3306/supportdb
   data:
     redis:
       host: 127.0.0.1
@@ -19,3 +20,6 @@ eureka:
   client:
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka/
+sonnetto:
+  urls:
+    user-service: http://127.0.0.1/8081/api/v1.0/users

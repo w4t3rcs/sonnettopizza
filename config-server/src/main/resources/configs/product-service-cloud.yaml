@@ -1,0 +1,18 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://user:sonnettomongodb@sonnetto-mongo-cluster.vjars.mongodb.net/?retryWrites=true&w=majority&appName=sonnetto-mongo-cluster
+    redis:
+      host: 127.0.0.1
+      port: 6379
+management:
+  zipkin:
+    tracing:
+      endpoint: http://127.0.0.1:9411
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
+sonnetto:
+  urls:
+    ingredient-service: http://127.0.0.1/8082/api/v1.0/ingredients
