@@ -1,0 +1,24 @@
+spring:
+  elasticsearch:
+    username: elastic
+    password: sonnettoelastic
+    uris: http://127.0.0.1:9200
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+  kafka:
+    bootstrap-servers: 127.0.0.1:19092
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: newtodo01@gmail.com
+    password: mnrd mbeb loqo ipnx
+management:
+  zipkin:
+    tracing:
+      endpoint: http://127.0.0.1:9411
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/

@@ -4,7 +4,7 @@ spring:
       base-url: http://127.0.0.1:11434
   datasource:
     username: root
-    password: password
+    password: sonnettomysql
     url: jdbc:mysql://127.0.0.1:3306/supportdb
   data:
     redis:

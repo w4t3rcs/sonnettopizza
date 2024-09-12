@@ -1,10 +1,6 @@
 server:
   port: 8084
 spring:
-  datasource:
-    username: root
-    password: password
-    url: jdbc:mysql://mysql:3306/orderdb
   jpa:
     hibernate:
       ddl-auto: create
@@ -18,12 +14,7 @@ spring:
       cache-null-values: false
       enable-statistics: true
       time-to-live: 2m
-  data:
-    redis:
-      host: redis
-      port: 6379
   kafka:
-    bootstrap-servers: broker:19092
     admin:
       fail-fast: true
     producer:
@@ -52,9 +43,6 @@ management:
   tracing:
     sampling:
       probability: 1
-  zipkin:
-    tracing:
-      endpoint: http://zipkin:9411
 resilience4j:
   circuitbreaker:
     instances:
@@ -96,16 +84,3 @@ resilience4j:
         max-attempts: 3
         wait-duration:
           seconds: 5
-eureka:
-  client:
-    service-url:
-      defaultZone: http://eureka-server:8761/eureka/
-stripe:
-  api-key: sk_test_51Pj5rhP9Ug6EI0VqWjPjfT2spcyTNTF0F806ZMEumwrl5WdFRhwZk06MrL6TKGINfg9FZDhPXBLfJr4GCctKMFBl00pt9VPh1C
-  client:
-    success-url: http://frontend:3000/payment/success
-    failure-url: http://frontend:3000/payment/failure
-sonnetto:
-  urls:
-    user-service: http://user-service/8081/api/v1.0/users
-    product-service: http://product-service/8083/api/v1.0/products

@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    username: root
+    password: sonnettomysql
+    url: jdbc:mysql://127.0.0.1:3306/ingredientdb
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+management:
+  zipkin:
+    tracing:
+      endpoint: http://127.0.0.1:9411
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/

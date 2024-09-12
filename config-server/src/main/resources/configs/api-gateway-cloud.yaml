@@ -1,0 +1,78 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://127.0.0.1:8282/realms/sonnetto-realm
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: user-service
+            uri: lb://user-service
+            predicates:
+              - Path=/api/v1.0/users
+          - id: user-service-docs
+            uri: lb://user-service
+            predicates:
+              - Path=/api/v1.0/docs/user-service
+            filters:
+              - SetPath=/api/v1.0/docs
+          - id: ingredient-service
+            uri: lb://ingredient-service
+            predicates:
+              - Path=/api/v1.0/ingredients
+          - id: ingredient-service-docs
+            uri: lb://ingredient-service
+            predicates:
+              - Path=/api/v1.0/docs/ingredient-service
+            filters:
+              - SetPath=/api/v1.0/docs
+          - id: product-service
+            uri: lb://product-service
+            predicates:
+              - Path=/api/v1.0/products
+          - id: product-service-docs
+            uri: lb://product-service
+            predicates:
+              - Path=/api/v1.0/docs/product-service
+            filters:
+              - SetPath=/api/v1.0/docs
+          - id: order-service
+            uri: lb://order-service
+            predicates:
+              - Path=/api/v1.0/orders
+          - id: order-service-docs
+            uri: lb://order-service
+            predicates:
+              - Path=/api/v1.0/docs/order-service
+            filters:
+              - SetPath=/api/v1.0/docs
+          - id: notification-service
+            uri: lb://notification-service
+            predicates:
+              - Path=/api/v1.0/notifications
+          - id: notification-service-docs
+            uri: lb://notification-service
+            predicates:
+              - Path=/api/v1.0/docs/notification-service
+            filters:
+              - SetPath=/api/v1.0/docs
+          - id: eureka-server
+            uri: http://127.0.0.1:8761
+            predicates:
+              - Path=/eureka/web
+            filters:
+              - SetPath=/
+          - id: eureka-server-static
+            uri: http://127.0.0.1:8761
+            predicates:
+              - Path=/eureka/**
+management:
+  zipkin:
+    tracing:
+      endpoint: http://127.0.0.1:9411
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
