@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: notification-service
-          image: w4t3rcs/sonnetto-notification-service:latest
+          image: 961341518387.dkr.ecr.eu-north-1.amazonaws.com/w4t3rcs/sonnetto-notification-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8085
@@ -40,4 +40,4 @@ spec:
     - protocol: TCP
       port: 8085
       targetPort: 8085
-  type: NodePort
+  type: LoadBalancer

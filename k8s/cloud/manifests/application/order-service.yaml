@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: order-service
-          image: w4t3rcs/sonnetto-order-service:latest
+          image: 961341518387.dkr.ecr.eu-north-1.amazonaws.com/w4t3rcs/sonnetto-order-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8084
@@ -40,4 +40,4 @@ spec:
     - protocol: TCP
       port: 8084
       targetPort: 8084
-  type: NodePort
+  type: LoadBalancer

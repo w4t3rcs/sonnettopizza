@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: ingredient-service
-          image: w4t3rcs/sonnetto-ingredient-service:latest
+          image: 961341518387.dkr.ecr.eu-north-1.amazonaws.com/w4t3rcs/sonnetto-ingredient-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8082
@@ -40,4 +40,4 @@ spec:
     - protocol: TCP
       port: 8082
       targetPort: 8082
-  type: NodePort
+  type: LoadBalancer

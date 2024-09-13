@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: support-service
-          image: w4t3rcs/sonnetto-support-service:latest
+          image: 961341518387.dkr.ecr.eu-north-1.amazonaws.com/w4t3rcs/sonnetto-support-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8086
@@ -40,4 +40,4 @@ spec:
     - protocol: TCP
       port: 8086
       targetPort: 8086
-  type: NodePort
+  type: LoadBalancer

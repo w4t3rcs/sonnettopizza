@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: w4t3rcs/sonnetto-api-gateway:latest
+          image: 961341518387.dkr.ecr.eu-north-1.amazonaws.com/w4t3rcs/sonnetto-api-gateway:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -40,4 +40,4 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-  type: NodePort
+  type: LoadBalancer

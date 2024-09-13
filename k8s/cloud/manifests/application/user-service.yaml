@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: w4t3rcs/sonnetto-user-service:latest
+          image: 961341518387.dkr.ecr.eu-north-1.amazonaws.com/w4t3rcs/sonnetto-user-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8081
@@ -40,4 +40,4 @@ spec:
     - protocol: TCP
       port: 8081
       targetPort: 8081
-  type: NodePort
+  type: LoadBalancer

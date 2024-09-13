@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: config-server
-          image: w4t3rcs/sonnetto-config-server:latest
+          image: 961341518387.dkr.ecr.eu-north-1.amazonaws.com/w4t3rcs/sonnetto-config-server:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8888
@@ -40,4 +40,4 @@ spec:
     - protocol: TCP
       port: 8888
       targetPort: 8888
-  type: NodePort
+  type: LoadBalancer
