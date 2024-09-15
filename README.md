@@ -63,4 +63,5 @@ This project is a pizza shop application designed using a microservices architec
   Orchestration: AWS EKS (Elastic Kubernetes Service)
   Databases: AWS RDS, AWS ElastiCache, MongoDB Atlas, AWS EC2 (for ELK)
 - ### Local Development:
-  To run the project locally, follow the steps in the **start.sh script**. This script handles Docker image creation, Kubernetes cluster creation, and microservices deployment.
+  To run the project locally, follow the steps in the **start.sh script**.
+  This script handles Docker image creation, Kubernetes cluster creation, and microservices deployment.
