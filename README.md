@@ -4,7 +4,7 @@ This project is a pizza shop application designed using a microservices architec
 ## Services Overview:
 - ### Eureka Server Registry
    URL: /eureka/web
-   Service Discovery and Registry for microservices.
+   Service Discovery UI for microservices.
 - ### Config Server
    Provides centralized configuration for all services (except eureka-server).
 - ### API Gateway
