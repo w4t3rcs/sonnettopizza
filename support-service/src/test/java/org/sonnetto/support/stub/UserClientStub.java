@@ -7,11 +7,11 @@ public class UserClientStub {
         String userUrl = "api/v1.0/users/" + id;
         String responseBody = """
                 {
-                    "id": 1,
+                    "id": %s,
                     "name": "test",
                     "email": "rousnagibator228@gmail.com"
                 }
-                """;
+                """.formatted(id);
         stubFor(head(urlEqualTo(userUrl))
                 .willReturn(aResponse()
                         .withStatus(200)));

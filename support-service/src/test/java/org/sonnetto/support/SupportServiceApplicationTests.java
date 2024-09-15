@@ -43,6 +43,7 @@ class SupportServiceApplicationTests {
     void prepare() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = port;
+        UserClientStub.stub(1L);
     }
 
     @Test
@@ -54,12 +55,24 @@ class SupportServiceApplicationTests {
                     "content": "What is SonnettoPizza?"
                 }
                 """;
-        UserClientStub.stub(1L);
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
                 .post("/api/v1.0/support")
+                .then()
+                .statusCode(Matchers.oneOf(200, 201))
+                .body("id", Matchers.notNullValue())
+                .body("result", Matchers.notNullValue());
+    }
+
+    @Test
+    @Order(2)
+    void testGetSupportSessionEndpoint() {
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/v1.0/support/1")
                 .then()
                 .statusCode(Matchers.oneOf(200, 201))
                 .body("id", Matchers.notNullValue())
