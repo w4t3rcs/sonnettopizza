@@ -1,6 +1,7 @@
 # SonnettoPizza
 This project is a pizza shop application designed using a microservices architecture, built on Spring Boot. It is deployed on AWS EKS, but can also be run locally using Kubernetes with the included start.sh script.
 ![No image for architecture](architecture.png)
+---
 ## Services Overview:
 - ### Eureka Server Registry
    URL: /eureka/web
