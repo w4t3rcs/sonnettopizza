@@ -14,6 +14,7 @@ import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.ollama.OllamaContainer;
 
 @Testcontainers
 @AutoConfigureWireMock(port = 0)
@@ -34,8 +35,7 @@ class SupportServiceApplicationTests {
             .withExposedPorts(6379);
     @Container
     @ServiceConnection
-    static GenericContainer<?> ollamaContainer = new GenericContainer<>("ollama/ollama:0.3.6")
-            .withExposedPorts(11434);
+    static GenericContainer<?> ollamaContainer = new OllamaContainer("ollama/ollama:0.3.6").withCommand("ollama", "pull", "all-minilm");
     @LocalServerPort
     private Integer port;
 
